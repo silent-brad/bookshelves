@@ -6,7 +6,8 @@ RUN mvn clean package -DskipTests
 
 FROM node:16 AS frontend-build
 WORKDIR /app/frontend
-COPY frontend/package*.json .
+COPY frontend/package.json .
+COPY frontend/package-lock.json .
 RUN npm install
 COPY frontend/ .
 RUN npm run build
