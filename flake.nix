@@ -17,7 +17,7 @@
           nodePackages."@angular/cli"
           sqlite
           nginx
-          flyctl
+          doctl
         ];
         shellHook = ''
           export JAVA_HOME=${pkgs.jdk17}
