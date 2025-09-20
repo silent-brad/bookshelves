@@ -1,0 +1,9 @@
+<article>
+  <header>{{ isEdit ? 'Edit Book' : 'Add Book' }}</header>
+  <form (submit)="onSubmit()">
+    <input type="text" [(ngModel)]="book.title" name="title" placeholder="Title" required>
+    <input type="text" [(ngModel)]="book.author" name="author" placeholder="Author" required>
+    <input type="text" [(ngModel)]="book.status" name="status" placeholder="Status" required>
+    <button type="submit">Save</button>
+  </form>
+</article>

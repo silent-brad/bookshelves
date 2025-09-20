@@ -1,2 +1,3 @@
 # bookshelves
-A Book Sharing App
+
+> _A Book Sharing App_

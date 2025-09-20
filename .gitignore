@@ -1,0 +1,27 @@
+.env
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+
+# Backend
+backend/target/
+backend/.mvn/
+backend/booksharing.db
+
+# Frontend
+frontend/node_modules/
+
+# DO NOT TOUCH ::::
+TODO.md
+TODOS.md
+AGENTS.md
+PROMPT.md
+# Opencode (DO NOT REMOVE) ::::
+opencode.nix
+package.json
+package-lock.json
+node_modules
+.api-keys
+opencode.json
+/tmp/pg_data
+/tmp/pg_sock
