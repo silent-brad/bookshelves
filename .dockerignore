@@ -15,12 +15,11 @@
 **/AGENTS.md
 **/PROMPT.md
 # Opencode (DO NOT REMOVE) ::::
-**/opencode.nix
-**/package.json
-**/package-lock.json
-**/node_modules
 **/.api-keys
 **/opencode.json
+#package.json
+#package-lock.json
+**/opencode.nix
 
 # flyctl launch added from frontend/.gitignore
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.

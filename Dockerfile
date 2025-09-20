@@ -4,12 +4,10 @@ COPY backend/pom.xml .
 COPY backend/src ./src
 RUN mvn clean package -DskipTests
 
-FROM node:16 AS frontend-build
+FROM node:20 AS frontend-build
 WORKDIR /app/frontend
-COPY frontend/package.json .
-COPY frontend/package-lock.json .
-RUN npm install
 COPY frontend/ .
+RUN npm install
 RUN npm run build
 
 FROM openjdk:17-jdk-slim
@@ -22,4 +20,4 @@ RUN apt-get update && apt-get install -y nginx sqlite3
 COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
-CMD ["sh", "-c", "service nginx start && java -jar app.jar"]
+CMD ["sh", "-c", "nginx -g 'daemon off;' & java -jar app.jar"]

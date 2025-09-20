@@ -16,6 +16,7 @@
           #nodePackages.npm
           nodePackages."@angular/cli"
           sqlite
+          nginx
           flyctl
         ];
         shellHook = ''
