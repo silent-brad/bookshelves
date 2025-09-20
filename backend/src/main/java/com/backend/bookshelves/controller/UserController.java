@@ -1,7 +1,7 @@
-package com.example.booksharing.controller;
+package com.backend.bookshelves.controller;
 
-import com.example.booksharing.model.User;
-import com.example.booksharing.service.UserService;
+import com.backend.bookshelves.model.User;
+import com.backend.bookshelves.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

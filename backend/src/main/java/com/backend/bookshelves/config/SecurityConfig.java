@@ -1,6 +1,6 @@
-package com.example.booksharing.config;
+package com.backend.bookshelves.config;
 
-import com.example.booksharing.service.UserService;
+import com.backend.bookshelves.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

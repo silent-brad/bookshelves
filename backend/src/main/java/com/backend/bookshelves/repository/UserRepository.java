@@ -1,6 +1,6 @@
-package com.example.booksharing.repository;
+package com.backend.bookshelves.repository;
 
-import com.example.booksharing.model.User;
+import com.backend.bookshelves.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {

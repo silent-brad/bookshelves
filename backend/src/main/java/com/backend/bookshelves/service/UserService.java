@@ -1,7 +1,7 @@
-package com.example.booksharing.service;
+package com.backend.bookshelves.service;
 
-import com.example.booksharing.model.User;
-import com.example.booksharing.repository.UserRepository;
+import com.backend.bookshelves.model.User;
+import com.backend.bookshelves.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

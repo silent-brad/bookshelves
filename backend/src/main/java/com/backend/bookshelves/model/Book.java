@@ -1,4 +1,4 @@
-package com.example.booksharing.model;
+package com.backend.bookshelves.model;
 
 import jakarta.persistence.*;
 

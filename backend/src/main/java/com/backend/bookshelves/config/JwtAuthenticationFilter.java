@@ -1,6 +1,6 @@
-package com.example.booksharing.config;
+package com.backend.bookshelves.config;
 
-import com.example.booksharing.util.JwtUtil;
+import com.backend.bookshelves.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

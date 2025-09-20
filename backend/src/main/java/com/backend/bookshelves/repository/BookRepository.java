@@ -1,7 +1,7 @@
-package com.example.booksharing.repository;
+package com.backend.bookshelves.repository;
 
-import com.example.booksharing.model.Book;
-import com.example.booksharing.model.User;
+import com.backend.bookshelves.model.Book;
+import com.backend.bookshelves.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

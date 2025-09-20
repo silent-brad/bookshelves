@@ -1,4 +1,4 @@
-package com.example.booksharing.util;
+package com.backend.bookshelves.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

@@ -1,12 +1,9 @@
 .env
-.terraform/
-terraform.tfstate
-terraform.tfstate.backup
 
 # Backend
 backend/target/
 backend/.mvn/
-backend/booksharing.db
+backend/bookshelves.db
 
 # Frontend
 frontend/node_modules/
@@ -23,5 +20,3 @@ package-lock.json
 node_modules
 .api-keys
 opencode.json
-/tmp/pg_data
-/tmp/pg_sock

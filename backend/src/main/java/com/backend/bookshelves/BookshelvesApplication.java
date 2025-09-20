@@ -1,13 +1,13 @@
-package com.example.booksharing;
+package com.backend.bookshelves;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BooksharingApplication {
+public class BookshelvesApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(BooksharingApplication.class, args);
+        SpringApplication.run(BookshelvesApplication.class, args);
     }
 
 }

@@ -1,8 +1,8 @@
-package com.example.booksharing.controller;
+package com.backend.bookshelves.controller;
 
-import com.example.booksharing.model.AuthenticationRequest;
-import com.example.booksharing.model.AuthenticationResponse;
-import com.example.booksharing.util.JwtUtil;
+import com.backend.bookshelves.model.AuthenticationRequest;
+import com.backend.bookshelves.model.AuthenticationResponse;
+import com.backend.bookshelves.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

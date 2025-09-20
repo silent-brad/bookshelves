@@ -1,8 +1,8 @@
-package com.example.booksharing.service;
+package com.backend.bookshelves.service;
 
-import com.example.booksharing.model.Book;
-import com.example.booksharing.model.User;
-import com.example.booksharing.repository.BookRepository;
+import com.backend.bookshelves.model.Book;
+import com.backend.bookshelves.model.User;
+import com.backend.bookshelves.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
