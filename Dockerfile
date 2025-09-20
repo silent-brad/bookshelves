@@ -13,11 +13,14 @@ RUN npm run build
 FROM openjdk:17-jdk-slim
 WORKDIR /app
 COPY --from=backend-build /app/backend/target/*.jar app.jar
-COPY --from=frontend-build /app/frontend/dist/frontend /app/public
+COPY --from=frontend-build /app/frontend/dist/frontend/browser /app/public
 
 RUN apt-get update && apt-get install -y nginx sqlite3
 
 COPY nginx.conf /etc/nginx/nginx.conf
+
+RUN mkdir -p /app/public && chmod -R 755 /app/public
+RUN ls -la /app/public
 
 EXPOSE 80
 CMD ["sh", "-c", "nginx -g 'daemon off;' & java -jar app.jar"]
