@@ -3,6 +3,8 @@ package com.backend.bookshelves.controller;
 import com.backend.bookshelves.model.AuthenticationRequest;
 import com.backend.bookshelves.model.AuthenticationResponse;
 import com.backend.bookshelves.util.JwtUtil;
+import com.backend.bookshelves.model.User;
+import com.backend.bookshelves.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
