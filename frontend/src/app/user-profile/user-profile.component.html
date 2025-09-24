@@ -1,41 +1,89 @@
-<article *ngIf="user; else noUser">
-  <header>User Profile: {{ user.name ? user.name + ' @' + user.username : '@' + user.username }}</header>
-  <div>
-    <p><strong>Username:</strong> {{ user.username }}</p>
-    <p><strong>Name:</strong> {{ user.name || 'Not set' }}</p>
-    <p><strong>Description:</strong> {{ user.description || 'No description provided' }}</p>
-    <p><strong>Joined:</strong> {{ user.createdAt | date:'shortDate' }}</p>
-  </div>
-  <h3>Reading Stats</h3>
-  <p><strong>Read:</strong> {{ readCount }}</p>
-  <p><strong>Reading:</strong> {{ readingCount }}</p>
-  <p><strong>Unread:</strong> {{ unreadCount }}</p>
-  <h3>Books</h3>
-  <ul *ngIf="books.length > 0; else noBooks">
-    <li *ngFor="let book of books">
-      <a href="/book/{{ book.id }}">{{ book.title }}</a> by {{ book.author }} ({{ book.status }})
-    </li>
-  </ul>
-  <ng-template #noBooks>
-    <p>No books found for this user.</p>
-  </ng-template>
-  <div *ngIf="authService.isLoggedIn() && authService.getToken() && isCurrentUser()">
-    <button (click)="toggleEdit()">{{ isEditing ? 'Cancel' : 'Edit Profile' }}</button>
-    <div *ngIf="isEditing">
-      <form (submit)="saveChanges()">
-        <input type="text" [(ngModel)]="updatedName" name="name" placeholder="Name">
-        <textarea [(ngModel)]="updatedDescription" name="description" placeholder="Description"></textarea>
-        <button type="submit">Save Changes</button>
-      </form>
+<div class="p-4 md:p-6 max-w-screen-lg mx-auto">
+  <article *ngIf="user; else noUser" class="card">
+    <header>
+      <h2>User Profile: {{ user.name ? user.name + ' @' + user.username : '@' + user.username }}</h2>
+    </header>
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="md:col-span-1 card p-4 bg-muted">
+        <h3 class="mb-2">About</h3>
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Name:</strong> {{ user.name || 'Not set' }}</p>
+        <p><strong>Description:</strong> {{ user.description || 'No description provided' }}</p>
+        <p><strong>Joined:</strong> {{ user.createdAt | date:'shortDate' }}</p>
+      </div>
+      <div class="md:col-span-2 card p-4 bg-muted">
+        <h3 class="mb-2">Reading Stats</h3>
+        <div class="grid grid-cols-3 gap-4 mb-4">
+          <div class="card p-2 text-center bg-background">
+            <p class="font-bold text-xl">{{ readCount }}</p>
+            <p class="text-sm text-muted-foreground">Read</p>
+          </div>
+          <div class="card p-2 text-center bg-background">
+            <p class="font-bold text-xl">{{ readingCount }}</p>
+            <p class="text-sm text-muted-foreground">Reading</p>
+          </div>
+          <div class="card p-2 text-center bg-background">
+            <p class="font-bold text-xl">{{ unreadCount }}</p>
+            <p class="text-sm text-muted-foreground">Unread</p>
+          </div>
+        </div>
+        <h3 class="mb-2">Books</h3>
+        <div class="overflow-x-auto mb-4" *ngIf="books.length > 0; else noBooks">
+          <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th scope="col" class="px-6 py-3">Title</th>
+                <th scope="col" class="px-6 py-3">Author</th>
+                <th scope="col" class="px-6 py-3">Status</th>
+                <th scope="col" class="px-6 py-3">Created</th>
+                <th scope="col" class="px-6 py-3">Updated</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let book of books" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"><a href="/book/{{ book.id }}" class="text-blue-600 dark:text-blue-500 hover:underline">{{ book.title }}</a></td>
+                <td class="px-6 py-4">{{ book.author }}</td>
+                <td class="px-6 py-4">{{ book.status }}</td>
+                <td class="px-6 py-4">{{ book.createdAt | date:'shortDate' }}</td>
+                <td class="px-6 py-4">{{ book.updatedAt | date:'shortDate' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ng-template #noBooks>
+          <p>No books found for this user.</p>
+        </ng-template>
+      </div>
+    </section>
+    <div *ngIf="authService.isLoggedIn() && authService.getToken() && isCurrentUser()" class="mt-6">
+      <button (click)="toggleEdit()" class="btn">{{ isEditing ? 'Cancel' : 'Edit Profile' }}</button>
+      <div *ngIf="isEditing" class="card mt-4 p-4 bg-muted">
+        <h3>Edit Profile</h3>
+        <form class="form grid gap-4" (submit)="saveChanges()">
+          <div class="grid gap-2">
+            <label for="name">Name</label>
+            <input id="name" type="text" [(ngModel)]="updatedName" name="name" placeholder="Name">
+          </div>
+          <div class="grid gap-2">
+            <label for="description">Description</label>
+            <textarea id="description" [(ngModel)]="updatedDescription" name="description" placeholder="Description"></textarea>
+          </div>
+          <button type="submit" class="btn">Save Changes</button>
+        </form>
+      </div>
     </div>
-  </div>
-  <button (click)="goToBooks()">Back to Books</button>
-</article>
-
-<ng-template #noUser>
-  <article>
-    <header>User Not Found</header>
-    <p>The user with username '{{ username }}' could not be found.</p>
-    <button (click)="goToBooks()">Back to Books</button>
+    <footer class="mt-6">
+      <button (click)="goToBooks()" class="btn-outline">Back to Books</button>
+    </footer>
   </article>
-</ng-template>
+
+  <ng-template #noUser>
+    <div class="card w-full max-w-md mx-auto">
+      <header>
+        <h2>User Not Found</h2>
+      </header>
+      <p>The user with username '{{ username }}' could not be found.</p>
+      <button (click)="goToBooks()" class="btn-outline">Back to Books</button>
+    </div>
+  </ng-template>
+</div>

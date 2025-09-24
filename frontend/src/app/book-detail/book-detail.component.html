@@ -1,24 +1,35 @@
-<article *ngIf="book; else noBook">
-  <header>Book Details: {{ book.title }}</header>
-  <div>
-    <p><strong>Title:</strong> {{ book.title }}</p>
-    <p><strong>Author:</strong> {{ book.author }}</p>
-    <p><strong>Status:</strong> {{ book.status }}</p>
-    <p><strong>Owner:</strong> <a href="/user/{{ book.username }}">{{ book.ownerName ? book.ownerName + ' @' + book.username : '@' + book.username }}</a></p>
-    <p><strong>Created:</strong> {{ book.createdAt | date:'shortDate' }}</p>
-    <p><strong>Last Updated:</strong> {{ book.updatedAt | date:'shortDate' }}</p>
-  </div>
-  <div *ngIf="authService.isLoggedIn() && book.username === currentUsername">
-    <button (click)="editBook()">Edit Book</button>
-    <button (click)="deleteBook()">Delete Book</button>
-  </div>
-  <button (click)="goToBooks()">Back to Books</button>
-</article>
-
-<ng-template #noBook>
-  <article>
-    <header>Book Not Found</header>
-    <p>The book with ID '{{ bookId }}' could not be found.</p>
-    <button (click)="goToBooks()">Back to Books</button>
+<div class="p-4 md:p-6 max-w-screen-lg mx-auto">
+  <article *ngIf="book; else noBook" class="card">
+    <header>
+      <h2>Book Details: {{ book.title }}</h2>
+    </header>
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="md:col-span-2 card p-4 bg-muted">
+        <h3 class="mb-2">Details</h3>
+        <p><strong>Title:</strong> {{ book.title }}</p>
+        <p><strong>Author:</strong> {{ book.author }}</p>
+        <p><strong>Status:</strong> {{ book.status }}</p>
+        <p><strong>Owner:</strong> <a href="/user/{{ book.username }}" class="text-blue-600 dark:text-blue-500 hover:underline">{{ book.ownerName ? book.ownerName + ' @' + book.username : '@' + book.username }}</a></p>
+        <p><strong>Created:</strong> {{ book.createdAt | date:'shortDate' }}</p>
+        <p><strong>Last Updated:</strong> {{ book.updatedAt | date:'shortDate' }}</p>
+      </div>
+    </section>
+    <div *ngIf="authService.isLoggedIn() && book.username === currentUsername" class="mt-6">
+      <button (click)="editBook()" class="btn mr-2">Edit Book</button>
+      <button (click)="deleteBook()" class="btn-outline">Delete Book</button>
+    </div>
+    <footer class="mt-6">
+      <button (click)="goToBooks()" class="btn-outline">Back to Books</button>
+    </footer>
   </article>
-</ng-template>
+
+  <ng-template #noBook>
+    <div class="card w-full max-w-md mx-auto">
+      <header>
+        <h2>Book Not Found</h2>
+      </header>
+      <p>The book with ID '{{ bookId }}' could not be found.</p>
+      <button (click)="goToBooks()" class="btn-outline">Back to Books</button>
+    </div>
+  </ng-template>
+</div>

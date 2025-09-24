@@ -1,11 +1,36 @@
-<article>
-  <header>Register</header>
-  <form (submit)="onRegister()">
-    <input type="text" [(ngModel)]="username" name="username" placeholder="Username" required>
-    <input type="text" [(ngModel)]="name" name="name" placeholder="Name">
-    <input type="email" [(ngModel)]="email" name="email" placeholder="Email" required>
-    <input type="password" [(ngModel)]="password" name="password" placeholder="Password" required>
-    <textarea [(ngModel)]="description" name="description" placeholder="Description"></textarea>
-    <button type="submit">Register</button>
-  </form>
-</article>
+<div class="flex min-h-screen items-center justify-center p-4">
+  <div class="card w-full max-w-md">
+    <header>
+      <h2>Register</h2>
+      <p>Create a new account</p>
+    </header>
+    <section>
+      <form class="form grid gap-4" (submit)="onRegister()">
+        <div class="grid gap-2">
+          <label for="username">Username</label>
+          <input id="username" type="text" [(ngModel)]="username" name="username" placeholder="Username" required>
+        </div>
+        <div class="grid gap-2">
+          <label for="name">Name</label>
+          <input id="name" type="text" [(ngModel)]="name" name="name" placeholder="Name">
+        </div>
+        <div class="grid gap-2">
+          <label for="email">Email</label>
+          <input id="email" type="email" [(ngModel)]="email" name="email" placeholder="Email" required>
+        </div>
+        <div class="grid gap-2">
+          <label for="password">Password</label>
+          <input id="password" type="password" [(ngModel)]="password" name="password" placeholder="Password" required>
+        </div>
+        <div class="grid gap-2">
+          <label for="description">Description</label>
+          <textarea id="description" [(ngModel)]="description" name="description" placeholder="Description"></textarea>
+        </div>
+        <button type="submit" class="btn w-full">Register</button>
+      </form>
+    </section>
+    <footer>
+      <p class="text-center text-sm text-muted-foreground">Already have an account? <a href="/login" class="underline">Login here</a></p>
+    </footer>
+  </div>
+</div>

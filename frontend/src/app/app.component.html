@@ -1,12 +1,20 @@
-<nav>
-  <a href="/books">Bookshelves</a>
-  <ng-container *ngIf="authService.isLoggedIn(); else notLoggedIn">
-    <span><a href="/user/{{ username }}">{{ name ? name + ' @' + username : '@' + username }}</a></span>
-    <a href="#" (click)="logout()">Logout</a>
-  </ng-container>
-  <ng-template #notLoggedIn>
-    <a href="/login">Login</a>
-    <a href="/register">Register</a>
-  </ng-template>
+<nav class="bg-background border-b">
+  <div class="flex h-14 w-full items-center gap-2 px-4 max-w-screen-lg mx-auto">
+    <a href="/books" class="btn-ghost p-2 h-12 flex items-center justify-start">
+      <!--<div class="bg-primary text-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" class="h-4 w-4"><rect width="256" height="256" fill="none"></rect><line x1="208" y1="128" x2="128" y2="208" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"></line><line x1="192" y1="40" x2="40" y2="192" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"></line></svg>
+      </div>-->
+      <span class="truncate font-medium ml-2">Bookshelves</span>
+    </a>
+    <div class="flex-1"></div>
+    <ng-container *ngIf="authService.isLoggedIn(); else notLoggedIn">
+      <span><a href="/user/{{ username }}" class="btn-ghost p-2 h-12 flex items-center justify-start">{{ name ? name + ' @' + username : '@' + username }}</a></span>
+      <a href="#" (click)="logout()" class="btn-outline p-2 h-8">Logout</a>
+    </ng-container>
+    <ng-template #notLoggedIn>
+      <a href="/login" class="btn-outline p-2 h-8">Login</a>
+      <a href="/register" class="btn p-2 h-8">Register</a>
+    </ng-template>
+  </div>
 </nav>
 <router-outlet />
