@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -74,5 +76,17 @@ public class BookController {
 
         bookService.deleteBook(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/authors")
+    public ResponseEntity<List<String>> getAuthors() {
+        List<String> authors = bookService.getAuthors();
+        return ResponseEntity.ok(authors);
+    }
+
+    @GetMapping("/author/{author}")
+    public ResponseEntity<List<Book>> getBooksByAuthor(@PathVariable String author) {
+        List<Book> books = bookService.getBooksByAuthor(author);
+        return ResponseEntity.ok(books);
     }
 }

@@ -42,4 +42,12 @@ public class BookService {
     public List<Book> getBooksByOwner(User owner) {
         return bookRepository.findByOwner(owner);
     }
+
+    public List<String> getAuthors() {
+        return bookRepository.findDistinctAuthors();
+    }
+
+    public List<Book> getBooksByAuthor(String author) {
+        return bookRepository.findByAuthor(author);
+    }
 }

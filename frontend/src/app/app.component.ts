@@ -7,14 +7,16 @@ import { AuthService } from './auth.service';
   selector: 'app-root',
   imports: [RouterOutlet, CommonModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
   title = 'frontend';
   username: string = '';
   name: string = '';
 
-  constructor(public authService: AuthService, private router: Router) {
+  constructor(
+    public authService: AuthService,
+    private router: Router,
+  ) {
     this.updateUsername();
   }
 
