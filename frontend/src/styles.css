@@ -2,3 +2,6 @@
 @import "basecoat-css";
 @import "./doom-64-theme.css";
 /* Additional custom styles can be added here if needed */
+* {
+  font-family: Junicode;
+}

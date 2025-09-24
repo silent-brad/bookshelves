@@ -10,11 +10,14 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'books', component: BookListComponent },
   { path: 'book/:id', component: BookDetailComponent },
   { path: 'user/:username', component: UserProfileComponent },
   { path: 'book-form', component: BookFormComponent, canActivate: [AuthGuard] },
-  { path: 'book-form/:id', component: BookFormComponent, canActivate: [AuthGuard] },
-  { path: '', redirectTo: '/books', pathMatch: 'full' },
-  { path: '**', redirectTo: '/books' },
+  {
+    path: 'book-form/:id',
+    component: BookFormComponent,
+    canActivate: [AuthGuard],
+  },
+  { path: '', component: BookListComponent },
+  { path: '**', redirectTo: '' },
 ];
