@@ -18,6 +18,7 @@ export class LoginComponent {
 
   onLogin() {
     this.authService.login(this.username, this.password).subscribe(() => {
+      // Notify AppComponent or update shared state if needed
       this.router.navigate(['/books']);
     });
   }

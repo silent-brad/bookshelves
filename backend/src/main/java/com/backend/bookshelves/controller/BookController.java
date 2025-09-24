@@ -27,7 +27,13 @@ public class BookController {
         return bookService.getAllBooks();
     }
 
-    @PostMapping
+    @GetMapping("/{id}")
+    public ResponseEntity<Book> getBookById(@PathVariable Long id) {
+        Book book = bookService.getBookById(id);
+        return book != null ? ResponseEntity.ok(book) : ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/create")
     public ResponseEntity<Book> createBook(@RequestBody Book book) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -37,13 +43,7 @@ public class BookController {
         return ResponseEntity.ok(saved);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Book> getBook(@PathVariable Long id) {
-        Book book = bookService.getBookById(id);
-        return book != null ? ResponseEntity.ok(book) : ResponseEntity.notFound().build();
-    }
-
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book bookDetails) {
         Book book = bookService.getBookById(id);
         if (book == null) return ResponseEntity.notFound().build();
@@ -61,7 +61,7 @@ public class BookController {
         return ResponseEntity.ok(updated);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         Book book = bookService.getBookById(id);
         if (book == null) return ResponseEntity.notFound().build();

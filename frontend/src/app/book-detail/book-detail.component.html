@@ -1,0 +1,24 @@
+<article *ngIf="book; else noBook">
+  <header>Book Details: {{ book.title }}</header>
+  <div>
+    <p><strong>Title:</strong> {{ book.title }}</p>
+    <p><strong>Author:</strong> {{ book.author }}</p>
+    <p><strong>Status:</strong> {{ book.status }}</p>
+    <p><strong>Owner:</strong> <a href="/user/{{ book.username }}">{{ book.ownerName ? book.ownerName + ' @' + book.username : '@' + book.username }}</a></p>
+    <p><strong>Created:</strong> {{ book.createdAt | date:'shortDate' }}</p>
+    <p><strong>Last Updated:</strong> {{ book.updatedAt | date:'shortDate' }}</p>
+  </div>
+  <div *ngIf="authService.isLoggedIn() && book.username === currentUsername">
+    <button (click)="editBook()">Edit Book</button>
+    <button (click)="deleteBook()">Delete Book</button>
+  </div>
+  <button (click)="goToBooks()">Back to Books</button>
+</article>
+
+<ng-template #noBook>
+  <article>
+    <header>Book Not Found</header>
+    <p>The book with ID '{{ bookId }}' could not be found.</p>
+    <button (click)="goToBooks()">Back to Books</button>
+  </article>
+</ng-template>

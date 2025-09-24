@@ -6,20 +6,28 @@
         <th>Title</th>
         <th>Author</th>
         <th>Status</th>
+        <th>Owner</th>
+        <th>Created</th>
+        <!--<th>Updated</th>-->
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let book of books">
-        <td>{{ book.title }}</td>
+        <td><a href="/book/{{ book.id }}">{{ book.title }}</a></td>
         <td>{{ book.author }}</td>
         <td>{{ book.status }}</td>
+        <td><a href="/user/{{ book.username }}">{{ book.ownerName ? book.ownerName + ' @' + book.username : '@' + book.username }}</a></td>
+        <td>{{ book.createdAt | date:'shortDate' }}</td>
+        <!--<td>{{ book.updatedAt | date:'shortDate' }}</td>-->
         <td>
-          <button (click)="editBook(book.id)">Edit</button>
-          <button (click)="deleteBook(book.id)">Delete</button>
+          <ng-container *ngIf="authService.isLoggedIn() && book.username === currentUsername">
+            <button (click)="editBook(book.id)">Edit</button>
+            <button (click)="deleteBook(book.id)">Delete</button>
+          </ng-container>
         </td>
       </tr>
     </tbody>
   </table>
-  <button (click)="addBook()">Add Book</button>
+  <button *ngIf="authService.isLoggedIn()" (click)="addBook()">Add Book</button>
 </article>

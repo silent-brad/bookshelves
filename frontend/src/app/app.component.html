@@ -1,1 +1,12 @@
+<nav>
+  <a href="/books">Bookshelves</a>
+  <ng-container *ngIf="authService.isLoggedIn(); else notLoggedIn">
+    <span><a href="/user/{{ username }}">{{ name ? name + ' @' + username : '@' + username }}</a></span>
+    <a href="#" (click)="logout()">Logout</a>
+  </ng-container>
+  <ng-template #notLoggedIn>
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
+  </ng-template>
+</nav>
 <router-outlet />

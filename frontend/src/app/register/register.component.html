@@ -2,8 +2,10 @@
   <header>Register</header>
   <form (submit)="onRegister()">
     <input type="text" [(ngModel)]="username" name="username" placeholder="Username" required>
+    <input type="text" [(ngModel)]="name" name="name" placeholder="Name">
     <input type="email" [(ngModel)]="email" name="email" placeholder="Email" required>
     <input type="password" [(ngModel)]="password" name="password" placeholder="Password" required>
+    <textarea [(ngModel)]="description" name="description" placeholder="Description"></textarea>
     <button type="submit">Register</button>
   </form>
 </article>

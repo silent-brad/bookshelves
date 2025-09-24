@@ -21,22 +21,21 @@ export class BookService {
   }
 
   getBooks(): Observable<any> {
-    console.log('Token being sent:', this.authService.getToken());
-    return this.http.get(this.apiUrl, { headers: this.getHeaders() });
+    return this.http.get(this.apiUrl);
   }
 
   addBook(book: any): Observable<any> {
-    return this.http.post(this.apiUrl, book, { headers: this.getHeaders() });
+    return this.http.post(`${this.apiUrl}/create`, book, { headers: this.getHeaders() });
   }
 
   updateBook(id: number, book: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, book, {
+    return this.http.put(`${this.apiUrl}/update/${id}`, book, {
       headers: this.getHeaders(),
     });
   }
 
   deleteBook(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`, {
+    return this.http.delete(`${this.apiUrl}/delete/${id}`, {
       headers: this.getHeaders(),
     });
   }

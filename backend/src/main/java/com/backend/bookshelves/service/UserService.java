@@ -23,6 +23,11 @@ public class UserService implements UserDetailsService {
             throw new RuntimeException("Username already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setCreatedAt(java.time.LocalDateTime.now());
+        return userRepository.save(user);
+    }
+
+    public User save(User user) {
         return userRepository.save(user);
     }
 

@@ -24,6 +24,9 @@ public class User implements UserDetails {
 
     @Column(nullable = false, unique = true)
     private String email;
+    private String name;
+    private String description;
+    private java.time.LocalDateTime createdAt;
 
     // Constructors
     public User() {}
@@ -49,6 +52,30 @@ public class User implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public java.time.LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(java.time.LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override

@@ -15,20 +15,28 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/login`, { username, password }).pipe(
       tap((response: any) => {
         localStorage.setItem('token', response.jwt);
+        localStorage.setItem('username', username);
+        // Fetch user data to get name after login
+        this.http.get(`http://localhost:8000/api/users/${username}`).subscribe((userData: any) => {
+          localStorage.setItem('name', userData.name || '');
+        });
       }),
     );
   }
 
-  register(username: string, password: string, email: string): Observable<any> {
+  register(username: string, password: string, email: string, name?: string, description?: string): Observable<any> {
     return this.http.post('http://localhost:8000/api/users/register', {
       username,
       password,
       email,
+      name,
+      description
     });
   }
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('username');
   }
 
   getToken() {

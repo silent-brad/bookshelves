@@ -1,0 +1,41 @@
+<article *ngIf="user; else noUser">
+  <header>User Profile: {{ user.name ? user.name + ' @' + user.username : '@' + user.username }}</header>
+  <div>
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Name:</strong> {{ user.name || 'Not set' }}</p>
+    <p><strong>Description:</strong> {{ user.description || 'No description provided' }}</p>
+    <p><strong>Joined:</strong> {{ user.createdAt | date:'shortDate' }}</p>
+  </div>
+  <h3>Reading Stats</h3>
+  <p><strong>Read:</strong> {{ readCount }}</p>
+  <p><strong>Reading:</strong> {{ readingCount }}</p>
+  <p><strong>Unread:</strong> {{ unreadCount }}</p>
+  <h3>Books</h3>
+  <ul *ngIf="books.length > 0; else noBooks">
+    <li *ngFor="let book of books">
+      <a href="/book/{{ book.id }}">{{ book.title }}</a> by {{ book.author }} ({{ book.status }})
+    </li>
+  </ul>
+  <ng-template #noBooks>
+    <p>No books found for this user.</p>
+  </ng-template>
+  <div *ngIf="authService.isLoggedIn() && authService.getToken() && isCurrentUser()">
+    <button (click)="toggleEdit()">{{ isEditing ? 'Cancel' : 'Edit Profile' }}</button>
+    <div *ngIf="isEditing">
+      <form (submit)="saveChanges()">
+        <input type="text" [(ngModel)]="updatedName" name="name" placeholder="Name">
+        <textarea [(ngModel)]="updatedDescription" name="description" placeholder="Description"></textarea>
+        <button type="submit">Save Changes</button>
+      </form>
+    </div>
+  </div>
+  <button (click)="goToBooks()">Back to Books</button>
+</article>
+
+<ng-template #noUser>
+  <article>
+    <header>User Not Found</header>
+    <p>The user with username '{{ username }}' could not be found.</p>
+    <button (click)="goToBooks()">Back to Books</button>
+  </article>
+</ng-template>

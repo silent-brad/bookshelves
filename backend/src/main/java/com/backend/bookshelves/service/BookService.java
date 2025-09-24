@@ -23,7 +23,16 @@ public class BookService {
     }
 
     public Book saveBook(Book book) {
-        return bookRepository.save(book);
+       if (book.getOwner() != null) {
+         book.setUsername(book.getOwner().getUsername());
+         book.setOwnerName(book.getOwner().getName());
+       }
+       java.time.LocalDateTime now = java.time.LocalDateTime.now();
+       if (book.getCreatedAt() == null) {
+         book.setCreatedAt(now);
+       }
+       book.setUpdatedAt(now);
+       return bookRepository.save(book);
     }
 
     public void deleteBook(Long id) {

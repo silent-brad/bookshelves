@@ -1,0 +1,22 @@
+nav {
+  background-color: #333;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin-right: 15px;
+}
+
+nav a:hover {
+  color: #ddd;
+}
+
+nav span {
+  color: white;
+  font-weight: bold;
+}

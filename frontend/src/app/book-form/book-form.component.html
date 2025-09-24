@@ -3,7 +3,11 @@
   <form (submit)="onSubmit()">
     <input type="text" [(ngModel)]="book.title" name="title" placeholder="Title" required>
     <input type="text" [(ngModel)]="book.author" name="author" placeholder="Author" required>
-    <input type="text" [(ngModel)]="book.status" name="status" placeholder="Status" required>
+    <select [(ngModel)]="book.status" name="status" required>
+      <option value="Unread">Unread</option>
+      <option value="Reading">Reading</option>
+      <option value="Read">Read</option>
+    </select>
     <button type="submit">Save</button>
   </form>
 </article>

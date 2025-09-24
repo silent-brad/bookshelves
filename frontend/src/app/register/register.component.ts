@@ -14,11 +14,13 @@ export class RegisterComponent {
   username: string = '';
   email: string = '';
   password: string = '';
+  name: string = '';
+  description: string = '';
 
   constructor(private authService: AuthService, private router: Router) { }
 
   onRegister() {
-    this.authService.register(this.username, this.password, this.email).subscribe(() => {
+    this.authService.register(this.username, this.password, this.email, this.name, this.description).subscribe(() => {
       this.router.navigate(['/login']);
     });
   }

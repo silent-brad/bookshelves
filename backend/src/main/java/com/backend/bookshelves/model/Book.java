@@ -19,8 +19,12 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
+    private String username;
+    private String ownerName;
 
     private String status; // e.g., available, shared
+    private java.time.LocalDateTime createdAt;
+    private java.time.LocalDateTime updatedAt;
 
     // Constructors
     public Book() {}
@@ -71,5 +75,37 @@ public class Book {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public java.time.LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(java.time.LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public java.time.LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(java.time.LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
