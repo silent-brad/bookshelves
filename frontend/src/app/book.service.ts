@@ -4,20 +4,24 @@ import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BookService {
-  private apiUrl = 'http://localhost:8080/api/books';
+  private apiUrl = 'http://localhost:8000/api/books';
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+  ) {}
 
   private getHeaders() {
     return new HttpHeaders({
-      'Authorization': 'Bearer ' + this.authService.getToken()
+      Authorization: 'Bearer ' + this.authService.getToken(),
     });
   }
 
   getBooks(): Observable<any> {
+    console.log('Token being sent:', this.authService.getToken());
     return this.http.get(this.apiUrl, { headers: this.getHeaders() });
   }
 
@@ -26,10 +30,15 @@ export class BookService {
   }
 
   updateBook(id: number, book: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, book, { headers: this.getHeaders() });
+    return this.http.put(`${this.apiUrl}/${id}`, book, {
+      headers: this.getHeaders(),
+    });
   }
 
   deleteBook(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
+    return this.http.delete(`${this.apiUrl}/${id}`, {
+      headers: this.getHeaders(),
+    });
   }
 }
+

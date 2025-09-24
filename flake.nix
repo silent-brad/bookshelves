@@ -17,6 +17,7 @@
           nodePackages."@angular/cli"
           sqlite
           nginx
+          docker
           doctl
         ];
         shellHook = ''
