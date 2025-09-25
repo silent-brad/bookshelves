@@ -38,6 +38,23 @@ export class BookListComponent implements OnInit {
     });
   }
 
+  toast(message: string) {
+    document.dispatchEvent(
+      new CustomEvent('basecoat:toast', {
+        detail: {
+          config: {
+            category: 'success',
+            title: 'Success',
+            description: message,
+            cancel: {
+              label: 'Dismiss',
+            },
+          },
+        },
+      }),
+    );
+  }
+
   openAddModal() {
     this.isEditing = false;
     this.book = { title: '', author: '', status: '' };
@@ -53,6 +70,7 @@ export class BookListComponent implements OnInit {
       this.books = [...this.books, res];
       this.editBookEl.nativeElement.close();
       this.book = { title: '', author: '', status: '' };
+      this.toast(`Book ${res.title} updated successfully.`);
     });
   }
 
@@ -82,6 +100,7 @@ export class BookListComponent implements OnInit {
           this.book = { title: '', author: '', status: '' };
           this.editBookId = null;
           this.isEditing = false;
+          this.toast(`Book ${res.title} updated successfully.`);
         });
     }
   }
