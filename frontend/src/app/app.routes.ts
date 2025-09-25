@@ -3,12 +3,12 @@ import { AuthGuard } from './auth.guard';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { BookListComponent } from './book-list/book-list.component';
-import { BookFormComponent } from './book-form/book-form.component';
 import { BookDetailComponent } from './book-detail/book-detail.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AuthorListComponent } from './author-list/author-list.component';
 import { AuthorDetailComponent } from './author-detail/author-detail.component';
 import { IndexComponent } from './index/index.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -16,12 +16,6 @@ export const routes: Routes = [
   { path: 'books', component: BookListComponent },
   { path: 'book/:id', component: BookDetailComponent },
   { path: 'user/:username', component: UserProfileComponent },
-  { path: 'book-form', component: BookFormComponent, canActivate: [AuthGuard] },
-  {
-    path: 'book-form/:id',
-    component: BookFormComponent,
-    canActivate: [AuthGuard],
-  },
   { path: 'authors', component: AuthorListComponent, canActivate: [AuthGuard] },
   {
     path: 'author/:author',
@@ -29,6 +23,5 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   { path: '', component: IndexComponent },
-  // add 404 page
-  { path: '**', redirectTo: '' },
+  { path: '**', component: PageNotFoundComponent }
 ];

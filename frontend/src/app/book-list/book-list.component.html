@@ -24,7 +24,7 @@
           <td class="px-6 py-4">{{ book.createdAt | date:'shortDate' }}</td>
           <td class="px-6 py-4">
             <ng-container *ngIf="authService.isLoggedIn() && book.username === currentUsername">
-              <button (click)="editBook(book.id)" class="btn-sm mr-2">Edit</button>
+              <button (click)="openEditModal(book.id)" class="btn-sm mr-2">Edit</button>
               <button (click)="deleteBook(book.id)" class="btn-sm-outline">Delete</button>
             </ng-container>
           </td>
@@ -34,13 +34,13 @@
   </div>
   <button *ngIf="authService.isLoggedIn()" (click)="openAddModal()" class="btn-outline">Add Book</button>
 
-  <dialog id="add-book" #addBook class="dialog" aria-labelledby="add-book-title" aria-describedby="add-book-description">
+  <dialog id="edit-book" #editBook class="dialog" aria-labelledby="edit-book-title" aria-describedby="edit-book-description">
     <article>
       <header>
-        <h2 id="add-book-title">Add Book</h2>
-        <p id="add-book-description">Add a new book to your collection.</p>
+        <h2 id="edit-book-title">{{ isEditing ? 'Edit Book' : 'Add Book' }}</h2>
+        <p id="edit-book-description">{{ isEditing ? 'Update the book details.' : 'Add a new book to your collection.' }}</p>
       </header>
-      <form (ngSubmit)="this.addBook()">
+      <form (ngSubmit)="submitForm()">
         <section>
           <div class="grid gap-3">
             <label for="title">Title</label>
@@ -56,12 +56,12 @@
           </div>
         </section>
         <footer class="grid gap-2 md:flex md:float-end">
-          <button type="button" class="btn-outline" (click)="closeAddModal()">Cancel</button>
-          <button type="submit" class="btn-primary">Add</button>
+          <button type="button" class="btn-outline" (click)="closeEditModal()">Cancel</button>
+          <button type="submit" class="btn-primary">{{ isEditing ? 'Update' : 'Add' }}</button>
         </footer>
       </form>
 
-      <button type="button" aria-label="Close dialog" (click)="closeAddModal()" class="cursor-pointer">
+      <button type="button" aria-label="Close dialog" (click)="closeEditModal()" class="cursor-pointer">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x">
           <path d="M18 6 6 18" />
           <path d="m6 6 12 12" />

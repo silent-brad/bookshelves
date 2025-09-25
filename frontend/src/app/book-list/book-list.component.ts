@@ -19,9 +19,11 @@ export class BookListComponent implements OnInit {
   statusOptions = [
     { value: 'Unread', label: 'Unread' },
     { value: 'Reading', label: 'Reading' },
-    { value: 'Read', label: 'Read' }
+    { value: 'Read', label: 'Read' },
   ];
-  @ViewChild('addBook') addBookEl!: ElementRef;
+  isEditing: boolean = false;
+  editBookId: number | null = null;
+  @ViewChild('editBook') editBookEl!: ElementRef;
 
   constructor(
     private bookService: BookService,
@@ -37,22 +39,64 @@ export class BookListComponent implements OnInit {
   }
 
   openAddModal() {
-    this.addBookEl.nativeElement.showModal();
+    this.isEditing = false;
+    this.book = { title: '', author: '', status: '' };
+    this.editBookEl.nativeElement.showModal();
   }
 
-  closeAddModal() {
-    this.addBookEl.nativeElement.close();
+  closeEditModal() {
+    this.editBookEl.nativeElement.close();
   }
 
   addBook() {
     this.bookService.addBook(this.book).subscribe((res: any) => {
       this.books = [...this.books, res];
-      this.addBookEl.nativeElement.close();
+      this.editBookEl.nativeElement.close();
       this.book = { title: '', author: '', status: '' };
     });
   }
 
-  editBook(id: number) {}
+  openEditModal(id: number) {
+    this.isEditing = true;
+    this.editBookId = id;
+    const bookToEdit = this.books.find((book) => book.id === id);
+    if (bookToEdit) {
+      this.book = {
+        title: bookToEdit.title,
+        author: bookToEdit.author,
+        status: bookToEdit.status,
+      };
+      this.editBookEl.nativeElement.showModal();
+    }
+  }
+
+  updateBook() {
+    if (this.editBookId !== null) {
+      this.bookService
+        .updateBook(this.editBookId, this.book)
+        .subscribe((res: any) => {
+          this.books = this.books.map((book) =>
+            book.id === this.editBookId ? res : book,
+          );
+          this.editBookEl.nativeElement.close();
+          this.book = { title: '', author: '', status: '' };
+          this.editBookId = null;
+          this.isEditing = false;
+        });
+    }
+  }
+
+  submitForm() {
+    if (this.isEditing) {
+      this.updateBook();
+    } else {
+      this.addBook();
+    }
+  }
+
+  editBook(id: number) {
+    this.openEditModal(id);
+  }
 
   deleteBook(id: number) {
     this.bookService.deleteBook(id).subscribe(() => {
