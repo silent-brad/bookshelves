@@ -8,17 +8,21 @@ import { Router } from '@angular/router';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports: [FormsModule]
+  imports: [FormsModule],
 })
 export class LoginComponent {
   username: string = '';
   password: string = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
   onLogin() {
     this.authService.login(this.username, this.password).subscribe(() => {
       // Notify AppComponent or update shared state if needed
+      localStorage.setItem('username', this.username);
       this.router.navigate(['/books']);
     });
   }

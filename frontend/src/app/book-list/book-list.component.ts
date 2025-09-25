@@ -21,7 +21,9 @@ export class BookListComponent implements OnInit {
     { value: 'Reading', label: 'Reading' },
     { value: 'Read', label: 'Read' },
   ];
+  isLoading: boolean = true;
   isEditing: boolean = false;
+  skeletonNum: number[] = [1, 2, 3, 4, 5];
   editBookId: number | null = null;
   shareableUrl: string = '';
   @ViewChild('editBook') editBookEl!: ElementRef;
@@ -37,6 +39,7 @@ export class BookListComponent implements OnInit {
   ngOnInit() {
     this.bookService.getBooks().subscribe((data) => {
       this.books = data;
+      this.isLoading = false;
     });
   }
 

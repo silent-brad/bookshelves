@@ -6,9 +6,20 @@
   <div class="mb-4">
     <button *ngIf="authService.isLoggedIn()" (click)="openAddModal()" class="btn-outline">Add Book</button>
   </div>
+  <div *ngIf="isLoading" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div *ngFor="let i of skeletonNum" class="card w-full p-4 h-fit">
+      <h2 class="text-xl font-semibold mb-2 dark:text-white"></h2>
+        <div class="bg-accent animate-pulse rounded-md h-4 w-[150px]"></div>
+        <div class="bg-accent animate-pulse rounded-md h-4 w-[180px]"></div>
+        <div class="bg-accent animate-pulse rounded-md h-4 w-[100px]"></div>
+        <div class="bg-accent animate-pulse rounded-md h-4 w-[40px]"></div>
+        <div class="bg-accent animate-pulse rounded-md h-4 w-[100px]"></div>
+    </div>
+  </div>
+
   <div *ngIf="books.length === 0" class="text-center text-gray-500">No books available.</div>
-  <div *ngIf="books.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-    <div *ngFor="let book of books" class="card w-full shadow p-4 bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow duration-200 h-fit">
+  <div *ngIf="!isLoading && books.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div *ngFor="let book of books" class="card w-full p-4 h-fit">
       <h2 class="text-xl font-semibold mb-2 dark:text-white">{{ book.title }}</h2>
       <p><strong>Author:</strong> <a href="/author/{{ book.author }}" class="text-blue-600 dark:text-blue-400 hover:underline">{{ book.author }}</a></p>
       <p><strong>Status:</strong> {{ book.status }}</p>

@@ -61,9 +61,9 @@
       aria-orientation="vertical"
       data-empty="No status found."
     >
-      <div 
-        *ngFor="let option of filteredOptions" 
-        role="option" 
+      <div
+        *ngFor="let option of filteredOptions"
+        role="option"
         [attr.data-value]="option.value"
         (click)="selectOption(option.value)"
         class="option"
