@@ -23,7 +23,9 @@ export class BookListComponent implements OnInit {
   ];
   isEditing: boolean = false;
   editBookId: number | null = null;
+  shareableUrl: string = '';
   @ViewChild('editBook') editBookEl!: ElementRef;
+  @ViewChild('shareBook') shareBookEl!: ElementRef;
 
   constructor(
     private bookService: BookService,
@@ -63,6 +65,10 @@ export class BookListComponent implements OnInit {
 
   closeEditModal() {
     this.editBookEl.nativeElement.close();
+  }
+
+  closeShareModal() {
+    this.shareBookEl.nativeElement.close();
   }
 
   addBook() {
@@ -117,9 +123,29 @@ export class BookListComponent implements OnInit {
     this.openEditModal(id);
   }
 
+  openShareModal(id: number) {
+    this.shareableUrl = `http://localhost:4200/book/${id}`;
+    this.shareBookEl.nativeElement.showModal();
+  }
+
+  copyLink() {
+    navigator.clipboard
+      .writeText(this.shareableUrl)
+      .then(() => {
+        this.toast(`Link copied to clipboard.`);
+        this.shareBookEl.nativeElement.close();
+      })
+      .catch((err) => {
+        console.error('Failed to copy: ', err);
+        // Toast..?
+      });
+    this.shareableUrl = '';
+  }
+
   deleteBook(id: number) {
     this.bookService.deleteBook(id).subscribe(() => {
       this.books = this.books.filter((book) => book.id !== id);
+      this.toast(`Book deleted successfully.`);
     });
   }
 }
