@@ -23,7 +23,11 @@
       <h2 class="text-xl font-semibold mb-2 dark:text-white">{{ book.title }}</h2>
       <p><strong>Author:</strong> <a href="/author/{{ book.author }}" class="text-blue-600 dark:text-blue-400 hover:underline">{{ book.author }}</a></p>
       <p><strong>Status:</strong> {{ book.status }}</p>
-      <p><strong>Added by:</strong> <a href="/user/{{ book.username }}" class="text-blue-600 dark:text-blue-400 hover:underline">{{ book.ownerName ? book.ownerName + ' @' + book.username : '@' + book.username }}</a></p>
+      <p>
+        <strong>Added by:</strong>
+        <img class="w-6 h-6 rounded-full mr-2" [src]="`http://localhost:8000/uploads/avatars/${book.username}_avatar.webp`" [alt]="book.ownerName ? book.ownerName + ' @' + book.username : '@' + book.username"/>
+        <a [href]="`/user/${book.username}`" class="text-blue-600 dark:text-blue-400 hover:underline">{{ book.ownerName ? book.ownerName + ' @' + book.username : '@' + book.username }}</a>
+      </p>
       <p class="text-gray-500 dark:text-gray-400 text-sm mb-3">{{ book.createdAt | date:'shortDate' }}</p>
       <div class="flex space-x-2">
         <a href="/book/{{ book.id }}" class="btn">Details</a>

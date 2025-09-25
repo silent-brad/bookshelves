@@ -4,7 +4,7 @@ export interface Book {
   author: string;
   status: string;
   createdAt: string;
+  updatedAt?: string;
   username: string;
-  name: string;
-  //publicationDate?: string;
+  ownerName: string;
 }

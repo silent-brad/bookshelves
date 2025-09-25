@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { Book } from './book';
 
@@ -22,7 +23,26 @@ export class BookService {
   }
 
   getBooks(): Observable<any> {
-    return this.http.get(this.apiUrl);
+    return this.http.get(this.apiUrl).pipe(
+      tap((books: any) => {
+        books.forEach((book: any) => {
+          this.updateBookOwnerData(book);
+        });
+      })
+    );
+  }
+
+  updateBookOwnerData(book: any) {
+    this.http.get(`http://localhost:8000/api/users/${book.username}`).subscribe((userData: any) => {
+            book.ownerAvatar = `http://localhost:8000/uploads/avatars/${book.username}_avatar.webp`;
+      book.ownerName = userData.name || '';
+    });
+  }
+
+  refreshBookOwners(books: any[]) {
+    books.forEach(book => {
+      this.updateBookOwnerData(book);
+    });
   }
 
   addBook(book: any): Observable<any> {
@@ -48,8 +68,7 @@ export class BookService {
   }
 
   getBooksByAuthor(author: string): Observable<Book[]> {
-    return this.http.get<Book[]>(
-      `${this.apiUrl}/author/${encodeURIComponent(author)}`,
-    );
+    return this.http.get<Book[]>
+      (`${this.apiUrl}/author/${encodeURIComponent(author)}`);
   }
 }

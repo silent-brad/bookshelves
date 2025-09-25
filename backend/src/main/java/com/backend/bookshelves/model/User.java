@@ -21,13 +21,13 @@ public class User implements UserDetails {
     private String username;
 
     @Column(nullable = false)
-    @JsonIgnore
     private String password;
 
     @Column(nullable = false, unique = true)
     private String email;
     private String name;
     private String description;
+    private Boolean avatarSet = false;
     private java.time.LocalDateTime createdAt;
 
     // Constructors
@@ -74,6 +74,14 @@ public class User implements UserDetails {
 
     public java.time.LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public boolean isAvatarSet() {
+        return avatarSet;
+    }
+
+    public void setAvatarSet(boolean avatarSet) {
+        this.avatarSet = avatarSet;
     }
 
     public void setCreatedAt(java.time.LocalDateTime createdAt) {

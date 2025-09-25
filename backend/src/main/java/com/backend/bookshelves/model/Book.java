@@ -19,7 +19,9 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
+    @Column(nullable = false)
     private String username;
+    @Column(nullable = false)
     private String ownerName;
 
     private String status; // e.g., available, shared

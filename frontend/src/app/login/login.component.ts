@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css'],
   imports: [FormsModule],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   username: string = '';
   password: string = '';
 
@@ -19,11 +19,35 @@ export class LoginComponent {
     private router: Router,
   ) {}
 
-  onLogin() {
-    this.authService.login(this.username, this.password).subscribe(() => {
-      // Notify AppComponent or update shared state if needed
-      localStorage.setItem('username', this.username);
+  ngOnInit() {
+    if (this.authService.isLoggedIn()) {
       this.router.navigate(['/books']);
-    });
+    }
+  }
+
+  onLogin() {
+    this.authService
+      .login(this.username, this.password)
+      .subscribe((res: any) => {
+        this.toast('Login successful! Welcome back!');
+        this.router.navigate(['/books']);
+      });
+  }
+
+  toast(message: string) {
+    document.dispatchEvent(
+      new CustomEvent('basecoat:toast', {
+        detail: {
+          config: {
+            category: 'success',
+            title: 'Success',
+            description: message,
+            cancel: {
+              label: 'Dismiss',
+            },
+          },
+        },
+      }),
+    );
   }
 }

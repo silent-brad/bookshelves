@@ -25,7 +25,7 @@ public class BookService {
     public Book saveBook(Book book) {
        if (book.getOwner() != null) {
          book.setUsername(book.getOwner().getUsername());
-         book.setOwnerName(book.getOwner().getName());
+         book.setOwnerName(book.getOwner().getName() != null ? book.getOwner().getName() : book.getOwner().getUsername());
        }
        java.time.LocalDateTime now = java.time.LocalDateTime.now();
        if (book.getCreatedAt() == null) {
@@ -49,5 +49,14 @@ public class BookService {
 
     public List<Book> getBooksByAuthor(String author) {
         return bookRepository.findByAuthor(author);
+    }
+
+    public void updateBookOwnerFields(User user) {
+        List<Book> books = bookRepository.findByOwner(user);
+        for (Book book : books) {
+            book.setUsername(user.getUsername());
+            book.setOwnerName(user.getName() != null ? user.getName() : user.getUsername());
+            bookRepository.save(book);
+        }
     }
 }

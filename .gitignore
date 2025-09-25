@@ -4,6 +4,7 @@
 backend/target/
 backend/.mvn/
 backend/bookshelves.db
+backend/uploads/avatars/*
 
 # Frontend
 frontend/node_modules/

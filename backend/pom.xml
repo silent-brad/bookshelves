@@ -76,7 +76,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jetty</artifactId>
         </dependency>
-    </dependencies>
+        <dependency>
+        <groupId>com.github.jai-imageio</groupId>
+        <artifactId>jai-imageio-core</artifactId>
+        <version>1.4.0</version>
+    </dependency>
+    <dependency>
+        <groupId>com.github.jai-imageio</groupId>
+        <artifactId>jai-imageio-jpeg2000</artifactId>
+        <version>1.4.0</version>
+    </dependency>
+</dependencies>
 
     <build>
         <plugins>

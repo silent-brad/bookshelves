@@ -31,7 +31,7 @@ public class SecurityConfig {
                     return corsConfiguration;
                 }))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/register", "/api/auth/login", "/api/books", "/api/books/**", "/api/users/**").permitAll()
+                        .requestMatchers("/api/users/register", "/api/auth/login", "/api/books", "/api/books/**", "/api/users/**", "/uploads/**").permitAll()
                         .requestMatchers("/api/books/create", "/api/books/update/**", "/api/books/delete/**", "/api/users/update/**").authenticated()
                         .anyRequest().authenticated()
                 )
