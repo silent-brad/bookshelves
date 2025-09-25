@@ -18,7 +18,7 @@
       <tbody>
         <tr *ngFor="let book of books" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
           <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"><a href="/book/{{ book.id }}" class="text-blue-600 dark:text-blue-500 hover:underline">{{ book.title }}</a></td>
-          <td><a [routerLink]="['/author', book.author]" class="text-blue-600 hover:underline">{{ book.author }}</a></td>
+          <td><a href="/author/{{ book.author }}" class="text-blue-600 hover:underline">{{ book.author }}</a></td>
           <td class="px-6 py-4">{{ book.status }}</td>
           <td class="px-6 py-4"><a href="/user/{{ book.username }}" class="text-blue-600 dark:text-blue-500 hover:underline">{{ book.ownerName ? book.ownerName + ' @' + book.username : '@' + book.username }}</a></td>
           <td class="px-6 py-4">{{ book.createdAt | date:'shortDate' }}</td>
@@ -32,5 +32,41 @@
       </tbody>
     </table>
   </div>
-  <button *ngIf="authService.isLoggedIn()" (click)="addBook()" class="btn">Add Book</button>
+  <button *ngIf="authService.isLoggedIn()" (click)="openAddModal()" class="btn-outline">Add Book</button>
+
+  <dialog id="add-book" #addBook class="dialog" aria-labelledby="add-book-title" aria-describedby="add-book-description">
+    <article>
+      <header>
+        <h2 id="add-book-title">Add Book</h2>
+        <p id="add-book-description">Add a new book to your collection.</p>
+      </header>
+      <form (ngSubmit)="this.addBook()">
+        <section>
+          <div class="grid gap-3">
+            <label for="title">Title</label>
+            <input class="input" id="title" type="text" [(ngModel)]="book.title" name="title" placeholder="Title" required>
+          </div>
+          <div class="grid gap-3">
+            <label for="author">Author</label>
+            <input class="input" id="author" type="text" [(ngModel)]="book.author" name="author" placeholder="Author" required>
+          </div>
+          <div class="grid gap-3">
+            <label for="status">Status</label>
+            <app-basecoat-select [options]="statusOptions" [(selectedValue)]="book.status" name="status" required></app-basecoat-select>
+          </div>
+        </section>
+        <footer class="grid gap-2 md:flex md:float-end">
+          <button type="button" class="btn-outline" (click)="closeAddModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Add</button>
+        </footer>
+      </form>
+
+      <button type="button" aria-label="Close dialog" (click)="closeAddModal()" class="cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x">
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </svg>
+      </button>
+    </article>
+  </dialog>
 </div>

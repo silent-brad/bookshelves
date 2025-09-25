@@ -1,0 +1,76 @@
+<div class="custom-select" data-no-init="true">
+  <button
+    type="button"
+    class="btn-outline justify-between font-normal w-[200px]"
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    (click)="toggleDropdown()"
+  >
+    <span class="truncate">{{ selectedValue ? getSelectedLabel() : 'Select Status' }}</span>
+
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="text-muted-foreground opacity-50 shrink-0"
+    >
+      <path d="m7 15 5 5 5-5" />
+      <path d="m7 9 5-5 5 5" />
+    </svg>
+  </button>
+  <div class="dropdown" *ngIf="isDropdownOpen" data-no-init="true">
+    <header>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="text-muted-foreground"
+      >
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+      </svg>
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Search status..."
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+        aria-autocomplete="list"
+        role="combobox"
+        aria-expanded="false"
+        (input)="filterOptions()"
+      />
+    </header>
+
+    <div
+      role="listbox"
+      class="listbox"
+      aria-orientation="vertical"
+      data-empty="No status found."
+    >
+      <div 
+        *ngFor="let option of filteredOptions" 
+        role="option" 
+        [attr.data-value]="option.value"
+        (click)="selectOption(option.value)"
+        class="option"
+      >
+        {{ option.label }}
+      </div>
+    </div>
+  </div>
+  <input type="hidden" [value]="selectedValue" />
+</div>
