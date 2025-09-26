@@ -20,4 +20,4 @@
 
 ### Reverse Proxy Start Up
 
-- `caddy run --config proxy/Caddyfile`
+- `./proxy/start.sh`
