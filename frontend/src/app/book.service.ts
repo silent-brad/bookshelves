@@ -9,7 +9,7 @@ import { Book } from './book';
   providedIn: 'root',
 })
 export class BookService {
-  private apiUrl = 'http://localhost:8000/api/books';
+  private apiUrl = '/api/books';
 
   constructor(
     private http: HttpClient,
@@ -28,19 +28,19 @@ export class BookService {
         books.forEach((book: any) => {
           this.updateBookOwnerData(book);
         });
-      })
+      }),
     );
   }
 
   updateBookOwnerData(book: any) {
-    this.http.get(`http://localhost:8000/api/users/${book.username}`).subscribe((userData: any) => {
-            book.ownerAvatar = `http://localhost:8000/uploads/avatars/${book.username}_avatar.webp`;
+    this.http.get(`/api/users/${book.username}`).subscribe((userData: any) => {
+      book.ownerAvatar = `/api/uploads/avatars/${book.username}_avatar.webp`;
       book.ownerName = userData.name || '';
     });
   }
 
   refreshBookOwners(books: any[]) {
-    books.forEach(book => {
+    books.forEach((book) => {
       this.updateBookOwnerData(book);
     });
   }
@@ -68,7 +68,8 @@ export class BookService {
   }
 
   getBooksByAuthor(author: string): Observable<Book[]> {
-    return this.http.get<Book[]>
-      (`${this.apiUrl}/author/${encodeURIComponent(author)}`);
+    return this.http.get<Book[]>(
+      `${this.apiUrl}/author/${encodeURIComponent(author)}`,
+    );
   }
 }

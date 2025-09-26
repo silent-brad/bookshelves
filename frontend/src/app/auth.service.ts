@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8000/api/auth';
+  private apiUrl = '/api/auth';
 
   constructor(private http: HttpClient) {}
 
@@ -18,7 +18,7 @@ export class AuthService {
         localStorage.setItem('username', username);
         // Fetch user data to get name after login
         this.http
-          .get(`http://localhost:8000/api/users/${username}`)
+          .get(`/api/users/${username}`)
           .subscribe((userData: any) => {
             localStorage.setItem('name', userData.name || '');
             localStorage.setItem('username', username);
@@ -42,7 +42,7 @@ export class AuthService {
     name?: string,
     description?: string
   ): Observable<any> {
-    return this.http.post('http://localhost:8000/api/users/register', {
+    return this.http.post('/api/users/register', {
       username,
       password,
       email,

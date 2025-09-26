@@ -33,7 +33,7 @@ export class BookDetailComponent implements OnInit {
   }
 
   loadBookDetail() {
-    this.http.get(`http://localhost:8000/api/books/${this.bookId}`).subscribe(
+    this.http.get(`/api/books/${this.bookId}`).subscribe(
       (data) => {
         this.book = data;
       },
@@ -52,7 +52,7 @@ export class BookDetailComponent implements OnInit {
 
   deleteBook() {
     if (this.authService.isLoggedIn() && this.book && this.book.username === this.currentUsername) {
-      this.http.delete(`http://localhost:8000/api/books/${this.bookId}`, {
+      this.http.delete(`/api/books/${this.bookId}`, {
         headers: { 'Authorization': 'Bearer ' + this.authService.getToken() }
       }).subscribe(
         () => {

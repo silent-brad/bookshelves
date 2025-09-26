@@ -6,10 +6,18 @@
 
 - `nix develop`
 
+### Backend Build
+
+- `mvn clean package`
+
+### Frontend Build
+
+- `ng build`
+
 ### Backend Start Up
 
-- `mvn clean package && java -jar target/bookshelves-0.0.1-SNAPSHOT.jar`
+- `java -jar target/bookshelves-0.0.1-SNAPSHOT.jar`
 
-### Frontend Start Up
+### Reverse Proxy Start Up
 
-- `ng serve`
+- `caddy run --config proxy/Caddyfile`

@@ -1,5 +1,8 @@
 .env
 
+# Reverse Proxy
+proxy/Caddyfile
+
 # Backend
 backend/target/
 backend/.mvn/
@@ -8,10 +11,10 @@ backend/uploads/avatars/*
 
 # Frontend
 frontend/node_modules/
+frontend/dist/
 
 # DO NOT TOUCH ::::
 TODO.md
-TODOS.md
 AGENTS.md
 PROMPT.md
 # Opencode (DO NOT REMOVE) ::::

@@ -12,7 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @RestController
-@RequestMapping("/uploads")
+@RequestMapping("/api/uploads")
 public class FileController {
 
     @GetMapping("/avatars/{filename}")

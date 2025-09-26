@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
     if (storedUsername) {
       this.username = storedUsername || '';
       this.name = storedName || '';
-      this.avatar = `https://localhost:8000/uploads/avatars/${this.username}_avatar.webp`;
+      this.avatar = `/api/uploads/avatars/${this.username}_avatar.webp`;
     } else {
       this.username = '';
       this.name = '';

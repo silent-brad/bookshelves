@@ -41,7 +41,7 @@ export class UserProfileComponent implements OnInit {
 
   loadUserProfile() {
     this.http
-      .get<User>(`http://localhost:8000/api/users/${this.username}`)
+      .get<User>(`/api/users/${this.username}`)
       .subscribe(
         (data) => {
           this.user = data;
@@ -58,7 +58,7 @@ export class UserProfileComponent implements OnInit {
 
   loadUserBooks() {
     this.http
-      .get(`http://localhost:8000/api/users/${this.username}/books`)
+      .get(`/api/users/${this.username}/books`)
       .subscribe(
         (data: any) => {
           this.books = data;
@@ -109,7 +109,7 @@ export class UserProfileComponent implements OnInit {
     };
     this.http
       .put(
-        `http://localhost:8000/api/users/update/${this.username}`,
+        `/api/users/update/${this.username}`,
         updatedUser,
         {
           headers: { Authorization: 'Bearer ' + this.authService.getToken() },
@@ -148,7 +148,7 @@ export class UserProfileComponent implements OnInit {
 
     this.http
       .post(
-        `http://localhost:8000/api/users/${this.username}/avatar`,
+        `/api/users/${this.username}/avatar`,
         formData,
         {
           headers: { Authorization: 'Bearer ' + this.authService.getToken() },

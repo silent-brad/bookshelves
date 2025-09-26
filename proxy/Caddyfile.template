@@ -1,0 +1,50 @@
+{
+  # Global options
+  auto_https off
+}
+
+:$PROXY_PORT {
+  # Reverse proxy for backend - must be first to take precedence
+  handle /api/* {
+    reverse_proxy localhost:$SERVER_PORT {
+      header_up Host {host}
+      header_up X-Real-IP {remote}
+      header_up X-Forwarded-For {remote}
+      header_up X-Forwarded-Proto {scheme}
+    }
+    header {
+      Access-Control-Allow-Origin *
+      Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+      Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    }
+  }
+
+  # Serve static files and handle SPA routing for all other requests
+  handle /* {
+    root * $FRONTEND_PATH
+    file_server
+    try_files {path} /index.html
+  }
+
+  # Set correct MIME types
+  header *.js Content-Type application/javascript
+  header *.css Content-Type text/css
+  header *.html Content-Type text/html
+  header *.json Content-Type application/json
+  header *.png Content-Type image/png
+  header *.jpg Content-Type image/jpeg
+  header *.jpeg Content-Type image/jpeg
+  header *.svg Content-Type image/svg+xml
+  header *.wasm Content-Type application/wasm
+  header *.webp Content-Type image/webp
+  header *.ico Content-Type image/x-icon
+
+  # Logging
+  log {
+    output file ./access.log {
+      roll_size 10mb
+      roll_keep 5
+      roll_keep_for 7d
+    }
+  }
+}
