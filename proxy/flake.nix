@@ -15,20 +15,20 @@
           version = "0.0.1";
           src = ./.;
 
-          buildInputs = [
-            pkgs.caddy
-            pkgs.gettext
-          ]; # gettext provides envsubst for template substitution
+          buildInputs = [ pkgs.caddy pkgs.gettext ];
 
           installPhase = ''
-            mkdir -p $out/bin $out/config $out/data
-            # Pre-process the Caddyfile.template with default values or placeholders
-            sed -e "s|\$PROXY_PORT|8080|g" -e "s|\$SERVER_PORT|8000|g" -e "s|\$FRONTEND_PATH|$(dirname \"\$0\")/../static|g" Caddyfile.template > $out/data/Caddyfile
-            # Create a wrapper script to run caddy with the correct config path
+            mkdir -p $out/bin $out/data
+            cp Caddyfile.template $out/data/Caddyfile.template
             cat > $out/bin/start-proxy <<EOF
             #!/bin/sh
             echo "Starting reverse proxy"
-            CONFIG_PATH="\$(dirname "\$0")/../data/Caddyfile"
+            TEMPLATE_PATH="\$(dirname "\$0")/../data/Caddyfile.template"
+            CONFIG_PATH="/tmp/Caddyfile"
+            export PROXY_PORT=''${PROXY_PORT:-8080}
+            export SERVER_PORT=''${SERVER_PORT:-8000}
+            export FRONTEND_PATH="\$(cd "\$(dirname "\$0")/.." && pwd)/static"
+            ${pkgs.gettext}/bin/envsubst < "\$TEMPLATE_PATH" > "\$CONFIG_PATH"
             exec ${pkgs.caddy}/bin/caddy run --config "\$CONFIG_PATH"
             EOF
             chmod +x $out/bin/start-proxy

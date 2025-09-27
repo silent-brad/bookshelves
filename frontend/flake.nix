@@ -17,7 +17,7 @@
       in {
         packages.default = pkgs.buildNpmPackage {
           pname = "frontend";
-          version = "1.0.0";
+          version = "0.0.1";
           src = ./.;
 
           npmDepsHash = "sha256-xcvd9UDcA+6LPidEzmh856YVWcXQKJfoM8PCMnH6FfI=";
@@ -36,7 +36,8 @@
           installPhase = ''
             runHook preInstall
 
-            cp -r dist/ $out/
+            mkdir -p $out
+            cp -r dist/frontend/browser/* $out/
 
             runHook postInstall
           '';

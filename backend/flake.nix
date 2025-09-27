@@ -61,11 +61,11 @@
 
           installPhase = ''
             mvn package
-            mkdir -p $out/bin $out/share/app $out/data
+            mkdir -p $out/bin $out/share/app
             install -Dm644 ./target/bookshelves-0.0.1-SNAPSHOT.jar $out/share/app/app.jar
             # Ensure the database is placed in the result/data directory and is writable
-makeWrapper ${java}/bin/java $out/bin/app \
-               --add-flags "-jar $out/share/app/app.jar --spring.datasource.url=jdbc:sqlite:\$(pwd)/bookshelves.db --spring.jpa.hibernate.ddl-auto=create-drop"
+            makeWrapper ${java}/bin/java $out/bin/app \
+              --add-flags "-jar $out/share/app/app.jar --spring.datasource.url=jdbc:sqlite:\$(pwd)/bookshelves.db --spring.jpa.hibernate.ddl-auto=create-drop"
           '';
         };
 

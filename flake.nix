@@ -25,7 +25,6 @@
 
             # Copy backend
             cp -r ${backend.packages.${system}.default}/bin/. $out/bin/
-            cp -r ${backend.packages.${system}.default}/data/. $out/data/
 
             # Copy frontend build
             cp -r ${frontend.packages.${system}.default}/. $out/static/
