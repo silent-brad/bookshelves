@@ -41,7 +41,7 @@
             frontend.devShells.${system}.default
             proxy.devShells.${system}.default # New: Include proxy dev tools
           ];
-          buildInputs = with pkgs; [ docker doctl ];
+          #buildInputs = with pkgs; [ docker doctl ];
         };
 
         checks = pkgs.lib.mergeAttrs backend.checks.${system}
