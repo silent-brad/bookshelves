@@ -9,4 +9,5 @@ cd proxy
 
 sed -e "s|\$PROXY_PORT|$PROXY_PORT|g" -e "s|\$SERVER_PORT|$SERVER_PORT|g" -e "s|\$FRONTEND_PATH|$FRONTEND_PATH|g" Caddyfile.template >Caddyfile
 
+echo "Starting reverse proxy"
 caddy run --config ./Caddyfile

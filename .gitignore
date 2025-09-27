@@ -1,5 +1,10 @@
 .env
 
+# Nix
+result
+frontend/result
+backend/result
+
 # Reverse Proxy
 proxy/Caddyfile
 proxy/access.log
@@ -20,8 +25,8 @@ AGENTS.md
 PROMPT.md
 # Opencode (DO NOT REMOVE) ::::
 opencode.nix
-package.json
-package-lock.json
+#package.json
+#package-lock.json
 node_modules
 .api-keys
 opencode.json
