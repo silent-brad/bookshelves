@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -9,13 +9,13 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./basecoat-select.component.css'],
   imports: [CommonModule, FormsModule],
 })
-export class BasecoatSelectComponent {
+export class BasecoatSelectComponent implements OnInit {
   @Input() options: { value: string; label: string }[] = [];
-  @Input() selectedValue: string = '';
+  @Input() selectedValue = '';
   @Output() selectedValueChange = new EventEmitter<string>();
 
-  isDropdownOpen: boolean = false;
-  searchTerm: string = '';
+  isDropdownOpen = false;
+  searchTerm = '';
   filteredOptions: { value: string; label: string }[] = [];
 
   ngOnInit() {

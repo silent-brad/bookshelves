@@ -14,16 +14,16 @@ import { User } from '../user';
   imports: [CommonModule, FormsModule, DatePipe],
 })
 export class UserProfileComponent implements OnInit {
-  username: string = '';
+  username = '';
   user: User | null = null;
-  isEditing: boolean = false;
-  updatedName: string = '';
-  updatedDescription: string = '';
+  isEditing = false;
+  updatedName = '';
+  updatedDescription = '';
   selectedFile: File | null = null;
   books: any[] = [];
-  readCount: number = 0;
-  readingCount: number = 0;
-  unreadCount: number = 0;
+  readCount = 0;
+  readingCount = 0;
+  unreadCount = 0;
 
   constructor(
     private route: ActivatedRoute,

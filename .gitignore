@@ -4,6 +4,9 @@
 result
 frontend/result
 backend/result
+proxy/result
+bookshelves.db
+access.log
 
 # Reverse Proxy
 proxy/Caddyfile

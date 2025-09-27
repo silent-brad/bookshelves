@@ -12,9 +12,9 @@ import { AuthService } from '../auth.service';
   imports: [CommonModule, DatePipe]
 })
 export class BookDetailComponent implements OnInit {
-  bookId: string = '';
+  bookId = '';
   book: any = null;
-  currentUsername: string = '';
+  currentUsername = '';
 
   constructor(
     private route: ActivatedRoute,

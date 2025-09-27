@@ -11,8 +11,8 @@ import { Router } from '@angular/router';
   imports: [FormsModule],
 })
 export class LoginComponent implements OnInit {
-  username: string = '';
-  password: string = '';
+  username = '';
+  password = '';
 
   constructor(
     private authService: AuthService,

@@ -20,7 +20,7 @@
           version = "1.0.0";
           src = ./.;
 
-          npmDepsHash = "sha256-9ArGucNJ9RXNeGWJejlAyJoyzVOh0/GcvAHmims1sAE=";
+          npmDepsHash = "sha256-xcvd9UDcA+6LPidEzmh856YVWcXQKJfoM8PCMnH6FfI=";
 
           npmInstallFlags = [ "--frozen-lockfile" "--offline" ];
 

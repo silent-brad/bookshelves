@@ -11,7 +11,7 @@ import { Book } from '../book';
   imports: [CommonModule, RouterModule],
 })
 export class AuthorDetailComponent implements OnInit {
-  author: string = '';
+  author = '';
   books: Book[] = [];
 
   constructor(

@@ -15,17 +15,17 @@ import { BasecoatSelectComponent } from '../basecoat-select/basecoat-select.comp
 export class BookListComponent implements OnInit {
   books: any[] = [];
   book: any = { title: '', author: '', status: '' };
-  currentUsername: string = '';
+  currentUsername = '';
   statusOptions = [
     { value: 'Unread', label: 'Unread' },
     { value: 'Reading', label: 'Reading' },
     { value: 'Read', label: 'Read' },
   ];
-  isLoading: boolean = true;
-  isEditing: boolean = false;
+  isLoading = true;
+  isEditing = false;
   skeletonNum: number[] = [1, 2, 3, 4, 5];
   editBookId: number | null = null;
-  shareableUrl: string = '';
+  shareableUrl = '';
   @ViewChild('editBook') editBookEl!: ElementRef;
   @ViewChild('shareBook') shareBookEl!: ElementRef;
 

@@ -10,9 +10,9 @@ import { AuthService } from './auth.service';
 })
 export class AppComponent implements OnInit {
   title = 'frontend';
-  username: string = '';
-  name: string = '';
-  avatar: string = '';
+  username = '';
+  name = '';
+  avatar = '';
   currentYear: number = new Date().getFullYear();
 
   constructor(
