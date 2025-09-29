@@ -20,7 +20,6 @@
           installPhase = ''
             mkdir -p $out/bin $out/data
             cp Caddyfile.template $out/data/Caddyfile.template
-            cp Caddyfile.template $out/data/Caddyfile.template
             cat > $out/bin/start-proxy <<EOF
             #!/usr/bin/env ${pkgs.bash}/bin/bash
             #\$(dirname "\$0")/app &
