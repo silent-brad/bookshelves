@@ -22,13 +22,12 @@
             cp Caddyfile.template $out/data/Caddyfile.template
             cat > $out/bin/start-proxy <<EOF
             #!/usr/bin/env ${pkgs.bash}/bin/bash
-            #\$(dirname "\$0")/app &
             echo "Starting reverse proxy"
             TEMPLATE_PATH="\$(dirname "\$0")/../data/Caddyfile.template"
             CONFIG_PATH="/tmp/Caddyfile"
             export PROXY_PORT=\''${PROXY_PORT:-8080}
             export SERVER_PORT=\''${SERVER_PORT:-8000}
-            export FRONTEND_PATH="\$(dirname "\$0")/../static"
+            export FRONTEND_PATH="\$(cd "\$(dirname "\$0")/.." && pwd)/static"
             ${pkgs.gettext}/bin/envsubst < "\$TEMPLATE_PATH" > "\$CONFIG_PATH"
             exec ${pkgs.caddy}/bin/caddy run --config "\$CONFIG_PATH"
             EOF
