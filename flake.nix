@@ -6,7 +6,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     backend.url = "path:./backend";
     frontend.url = "path:./frontend";
-    proxy.url = "path:./proxy"; # New: Integrate proxy flake
+    proxy.url = "path:./proxy";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -39,13 +39,12 @@
           inputsFrom = [
             backend.devShells.${system}.default
             frontend.devShells.${system}.default
-            proxy.devShells.${system}.default # New: Include proxy dev tools
+            proxy.devShells.${system}.default
           ];
-          #buildInputs = with pkgs; [ docker doctl ];
         };
 
         checks = pkgs.lib.mergeAttrs backend.checks.${system}
           (pkgs.lib.mergeAttrs frontend.checks.${system}
-            (proxy.checks.${system} or { })); # New: Include proxy checks if any
+            (proxy.checks.${system} or { }));
       });
 }

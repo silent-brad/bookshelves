@@ -14,30 +14,37 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Value;
 
 @Configuration
 public class SecurityConfig {
+    // Getting proxy port/host from environment variable
+    @Value("${proxy.port}")
+    private String proxyPort;
+    @Value("${proxy.host}")
+    private String proxyHost;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(request -> {
-                    var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
-                    //corsConfiguration.setAllowedOrigins(java.util.Arrays.asList("http://localhost:8080"));
-                    corsConfiguration.setAllowedOrigins(java.util.Arrays.asList("http://192.168.12.137:8080"));
-                    corsConfiguration.setAllowedMethods(java.util.Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                    corsConfiguration.setAllowedHeaders(java.util.Arrays.asList("*"));
-                    corsConfiguration.setAllowCredentials(true);
-                    return corsConfiguration;
-                }))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/register", "/api/auth/login", "/api/books", "/api/books/**", "/api/users/**", "/api/uploads/**").permitAll()
-                        .requestMatchers("/api/books/create", "/api/books/update/**", "/api/books/delete/**", "/api/users/update/**").authenticated()
-                        .anyRequest().authenticated()
-                )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+          .csrf(csrf -> csrf.disable())
+          .cors(cors -> cors.configurationSource(request -> {
+              var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
+
+              corsConfiguration.setAllowedOrigins(java.util.Arrays.asList("http://" + proxyHost + ":" + proxyPort));
+
+              corsConfiguration.setAllowedMethods(java.util.Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+              corsConfiguration.setAllowedHeaders(java.util.Arrays.asList("*"));
+              corsConfiguration.setAllowCredentials(true);
+              return corsConfiguration;
+          }))
+          .authorizeHttpRequests(auth -> auth
+                  .requestMatchers("/api/users/register", "/api/auth/login", "/api/books", "/api/books/**", "/api/users/**", "/api/uploads/**").permitAll()
+                  .requestMatchers("/api/books/create", "/api/books/update/**", "/api/books/delete/**", "/api/users/update/**").authenticated()
+                  .anyRequest().authenticated()
+          )
+          .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+          .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

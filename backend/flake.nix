@@ -26,15 +26,18 @@
             chmod -R 755 $TMPDIR/.m2/repository
             export MAVEN_OPTS="-Dmaven.repo.local=$TMPDIR/.m2/repository"
             mvn dependency:go-offline -B
-            mvn package -B
           '';
           installPhase = ''
             mkdir -p $out/repository
             cp -r $TMPDIR/.m2/repository/* $out/repository/
+            find $out/repository -name '_remote.repositories' -delete
+            find $out/repository -name 'maven-metadata.xml' -exec sed -i '/<lastUpdated>/d' {} \;
+            find $out/repository -type d -exec chmod 755 {} \;
+            find $out/repository -type f -exec chmod 644 {} \;
           '';
           outputHashMode = "recursive";
           outputHashAlgo = "sha256";
-          outputHash = "sha256-Z9iPv7A5tLYLSsiLoCrzqYxtmr6Z8Cz0D98GtxAzQFQ=";
+          outputHash = "sha256-Yi6mLwYHWqx/DKuGHO9k05e+p6xGG2uXnblpcm8oGEg=";
         };
       in {
         packages.default = pkgs.maven.buildMavenPackage {
@@ -49,7 +52,7 @@
           preBuild = ''
             export JAVA_HOME=${java}
             mkdir -p $TMPDIR/.m2/repository
-            chmod -R 755 $TMPDIR/.m2/repository
+            #chmod -R 755 $TMPDIR/.m2/repository
             export MAVEN_OPTS="-Dmaven.repo.local=$TMPDIR/.m2/repository"
             cp -r ${mvnDeps}/repository/* $TMPDIR/.m2/repository/
             chmod -R 755 $TMPDIR/.m2/repository
@@ -63,9 +66,17 @@
             mvn package
             mkdir -p $out/bin $out/share/app
             install -Dm644 ./target/bookshelves-0.0.1-SNAPSHOT.jar $out/share/app/app.jar
-            # Ensure the database is placed in the result/data directory and is writable
+
+            cat > $out/bin/init_db <<EOF
+            #!/usr/bin/env ${pkgs.bash}
+            echo "Creating DB"
+            exec ${java}/bin/java $out/bin/app \
+              --add-flags "-jar $out/share/app/app.jar --spring.datasource.url=jdbc:sqlite:\$(pwd)/bookshelves.db" --spring.jpa.hibernate.ddl-auto=create-drop
+            EOF
+            chmod +x $out/bin/init_db
+
             makeWrapper ${java}/bin/java $out/bin/app \
-              --add-flags "-jar $out/share/app/app.jar --spring.datasource.url=jdbc:sqlite:\$(pwd)/bookshelves.db --spring.jpa.hibernate.ddl-auto=create-drop"
+              --add-flags "-jar $out/share/app/app.jar --spring.datasource.url=jdbc:sqlite:\$(pwd)/bookshelves.db"
           '';
         };
 

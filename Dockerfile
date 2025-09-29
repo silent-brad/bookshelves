@@ -1,26 +1,33 @@
-FROM maven:3.8.5-openjdk-17 AS backend-build
-WORKDIR /app/backend
-COPY backend/pom.xml .
-COPY backend/src ./src
-RUN mvn clean package -DskipTests
+FROM nixos/nix:latest AS builder
 
-FROM node:20 AS frontend-build
-WORKDIR /app/frontend
-COPY frontend/ .
-RUN npm install
-RUN npm run build
+# Copy our source and setup our working dir.
+COPY . /tmp/build
+WORKDIR /tmp/build
 
-FROM openjdk:17-jdk-slim
+# Build our Nix environment
+RUN nix \
+    --extra-experimental-features "nix-command flakes" \
+    --option filter-syscalls false \
+    build
+
+# Copy the Nix store closure into a directory. The Nix store closure is the
+# entire set of Nix store values that we need for our build.
+RUN mkdir /tmp/nix-store-closure
+RUN cp -R $(nix-store -qR result/) /tmp/nix-store-closure
+RUN mkdir -p /tmp/build-tmp && chmod 1777 /tmp/build-tmp
+
+# Final image is based on scratch. We copy a bunch of Nix dependencies
+# but they're fully self-contained so we don't need Nix anymore.
+FROM scratch
+
 WORKDIR /app
-COPY --from=backend-build /app/backend/target/*.jar app.jar
-COPY --from=frontend-build /app/frontend/dist/frontend/browser /app/public
 
-RUN apt-get update && apt-get install -y nginx sqlite3
+# Copy /nix/store
+COPY --from=builder /tmp/nix-store-closure /nix/store
+COPY --from=builder /tmp/build/result /app
+COPY --from=builder /tmp/build-tmp /tmp
 
-COPY nginx.conf /etc/nginx/nginx.conf
+#RUN ./app/bin/app
 
-RUN mkdir -p /app/public && chmod -R 755 /app/public
-RUN ls -la /app/public
-
-EXPOSE 80
-CMD ["sh", "-c", "nginx -g 'daemon off;' & java -jar app.jar"]
+EXPOSE 8080
+ENTRYPOINT ["/app/bin/start-proxy"]

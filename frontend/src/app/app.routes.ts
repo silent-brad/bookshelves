@@ -16,11 +16,11 @@ export const routes: Routes = [
   { path: 'books', component: BookListComponent },
   { path: 'book/:id', component: BookDetailComponent },
   { path: 'user/:username', component: UserProfileComponent },
-  { path: 'authors', component: AuthorListComponent, canActivate: [AuthGuard] },
+  { path: 'authors', component: AuthorListComponent },
   {
     path: 'author/:author',
     component: AuthorDetailComponent,
-    canActivate: [AuthGuard],
+    //canActivate: [AuthGuard],
   },
   { path: '', component: IndexComponent },
   { path: '**', component: PageNotFoundComponent }

@@ -7,6 +7,7 @@ backend/result
 proxy/result
 bookshelves.db
 access.log
+uploads
 
 # Reverse Proxy
 proxy/Caddyfile
