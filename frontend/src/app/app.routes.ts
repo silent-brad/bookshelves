@@ -9,6 +9,7 @@ import { AuthorListComponent } from './author-list/author-list.component';
 import { AuthorDetailComponent } from './author-detail/author-detail.component';
 import { IndexComponent } from './index/index.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { SettingsComponent } from './settings/settings.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -17,11 +18,8 @@ export const routes: Routes = [
   { path: 'book/:id', component: BookDetailComponent },
   { path: 'user/:username', component: UserProfileComponent },
   { path: 'authors', component: AuthorListComponent },
-  {
-    path: 'author/:author',
-    component: AuthorDetailComponent,
-    //canActivate: [AuthGuard],
-  },
+  { path: 'author/:author', component: AuthorDetailComponent },
+  { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] },
   { path: '', component: IndexComponent },
-  { path: '**', component: PageNotFoundComponent }
+  { path: '**', component: PageNotFoundComponent },
 ];
