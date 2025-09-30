@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
   onLogin() {
     this.authService
       .login(this.username, this.password)
+      // Check if login is successful
       .subscribe((res: any) => {
         this.toast('Login successful! Welcome back!');
         this.router.navigate(['/books']);

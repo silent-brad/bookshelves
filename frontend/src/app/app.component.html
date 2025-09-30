@@ -1,63 +1,5 @@
 <main class="flex flex-col min-h-screen">
-  <nav class="bg-[#165A36] border-b">
-    <div class="flex h-14 w-full items-center gap-2 px-4 max-w-screen-lg mx-auto">
-      <a href="/" class="btn-ghost p-2 h-12 flex items-center justify-start">
-        <img src="/book-icon-64.png" class="h-12 w-12" />
-        <span class="text-3xl truncate font-bold ml-2 italic">Bookshelves</span>
-      </a>
-      <div class="flex-1"></div>
-      <ng-container *ngIf="authService.isLoggedIn(); else notLoggedIn">
-        <div id="profile-dropdown" class="dropdown-menu">
-          <button type="button" id="profile-dropdown-trigger" aria-haspopup="menu" aria-controls="profile-dropdown-menu" aria-expanded="false" class="btn-outline h-12 justify-start px-2 md:max-w-[200px]">
-            <img [alt]="'@' + username" [src]="`/api/uploads/avatars/${username}_avatar.webp`" class="size-8 shrink-0 rounded-full" onerror="this.src='/default-avatar.png'" />
-            <div class="grid flex-1 text-left text-sm leading-tight">
-              <span class="truncate font-medium"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{ name }}</font></font></span>
-              <span class="text-muted-foreground truncate text-xs"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{ '@' + username }}</font></font></span>
-            </div>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground ml-auto"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>
-          </button>
-
-          <div id="profile-dropdown-popover" data-popover aria-hidden="true" class="min-w-56">
-            <div role="menu" id="profile-dropdown-menu" aria-labelledby="profile-dropdown-trigger">
-              <div role="group" aria-labelledby="account-options">
-                <div role="heading" id="account-options">Account Options</div>
-                <a href="/user/{{ username }}" class="cursor-pointer" role="menuitem">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
-                  Profile
-                  <span class="text-muted-foreground ml-auto text-xs tracking-widest">⇧⌘P</span>
-                </a>
-                <a href="/settings" role="menuitem">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-                    <circle cx="12" cy="12" r="3" />
-                  </svg>
-                  Settings
-                  <span class="text-muted-foreground ml-auto text-xs tracking-widest">⌘S</span>
-                </a>
-              </div>
-              <hr role="separator" />
-              <button role="menuitem" class="cursor-pointer" (click)="logout()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                  <polyline points="16 17 21 12 16 7" />
-                  <line x1="21" x2="9" y1="12" y2="12" />
-                </svg>
-                Logout
-                <span class="text-muted-foreground ml-auto text-xs tracking-widest">⇧⌘P</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </ng-container>
-      <ng-template #notLoggedIn>
-        <a href="/login" class="btn-outline p-2 h-8">Login</a>
-        <a href="/register" class="btn p-2 h-8">Register</a>
-      </ng-template>
-    </div>
-  </nav>
+  <app-navbar></app-navbar>
   <router-outlet />
 </main>
 
@@ -68,7 +10,9 @@
       <span class="text-3xl truncate font-bold ml-2 italic">Bookshelves</span>
     </a>
     <div class="flex-1"></div>
-    <p class="text-white text-sm">Made by <i><a href="https://dev.knightoffaith.systems/">Brad White</a></i></p>
+    <p class="text-white text-sm">
+      Made by <i><a href="https://dev.knightoffaith.systems/">Brad White</a></i>
+    </p>
     <div class="flex-1"></div>
   </div>
 </footer>
