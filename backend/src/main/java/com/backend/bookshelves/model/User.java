@@ -22,7 +22,7 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private String password;
-    private String avatarSet;
+    private Boolean avatarSet;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -64,11 +64,11 @@ public class User implements UserDetails {
         this.name = name;
     }
 
-    public String getAvatarSet() {
+    public Boolean isAvatarSet() {
       return avatarSet;
     }
 
-    public void setAvatarSet(String avatarSet) {
+    public void setAvatarSet(Boolean avatarSet) {
       this.avatarSet = avatarSet;
     }
 

@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.logging.Logger;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -37,6 +38,8 @@ public class UserService implements UserDetailsService {
         generateDefaultAvatar(savedUser);
         return savedUser;
     }
+
+    private static final Logger logger = Logger.getLogger(UserService.class.getName());
 
     public void generateDefaultAvatar(User user) {
         try {

@@ -135,7 +135,7 @@ public class UserController {
             user.setAvatarSet(true);
             userService.save(user);
 
-            return ResponseEntity.ok();
+            return ResponseEntity.ok("");
         } catch (IOException e) {
             return ResponseEntity.badRequest().body("Failed to upload avatar: " + e.getMessage());
         }
