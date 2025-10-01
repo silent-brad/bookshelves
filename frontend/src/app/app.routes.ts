@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './auth.guard';
+import { NoAuthGuard } from './no-auth.guard';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { BookListComponent } from './book-list/book-list.component';
@@ -12,8 +13,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { SettingsComponent } from './settings/settings.component';
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
+  { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
+  { path: 'register', component: RegisterComponent, canActivate: [NoAuthGuard] },
   { path: 'books', component: BookListComponent },
   { path: 'book/:id', component: BookDetailComponent },
   { path: 'user/:username', component: UserProfileComponent },
