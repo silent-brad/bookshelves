@@ -3,7 +3,7 @@
     type="button"
     class="btn-outline justify-between font-normal w-[200px]"
     aria-haspopup="listbox"
-    aria-expanded="false"
+    [attr.aria-expanded]="isDropdownOpen"
     (click)="toggleDropdown()"
   >
     <span class="truncate">{{ selectedValue ? getSelectedLabel() : 'Select Status' }}</span>
@@ -49,8 +49,7 @@
         autocorrect="off"
         spellcheck="false"
         aria-autocomplete="list"
-        role="combobox"
-        aria-expanded="false"
+        role="combobox"        aria-controls="status-listbox"        [attr.aria-expanded]="isDropdownOpen"
         (input)="filterOptions()"
       />
     </header>
@@ -63,10 +62,7 @@
     >
       <div
         *ngFor="let option of filteredOptions"
-        role="option"
-        [attr.data-value]="option.value"
-        (click)="selectOption(option.value)"
-        class="option"
+        role="option"        [attr.data-value]="option.value"        [attr.aria-selected]="selectedValue === option.value"        tabindex="0"        (click)="selectOption(option.value)"        (keydown.enter)="selectOption(option.value); $event.preventDefault()"        class="option"
       >
         {{ option.label }}
       </div>

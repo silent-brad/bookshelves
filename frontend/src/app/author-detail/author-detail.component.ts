@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
@@ -14,10 +14,8 @@ export class AuthorDetailComponent implements OnInit {
   author = '';
   books: Book[] = [];
 
-  constructor(
-    private route: ActivatedRoute,
-    private bookService: BookService,
-  ) {}
+  private route = inject(ActivatedRoute);
+  private bookService = inject(BookService);
 
   ngOnInit(): void {
     this.author = this.route.snapshot.paramMap.get('author') || '';

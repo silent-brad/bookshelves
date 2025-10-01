@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { User } from '../user';
+import { Book } from '../book';
 
 @Component({
   standalone: true,
@@ -20,17 +21,15 @@ export class UserProfileComponent implements OnInit {
   updatedName = '';
   updatedDescription = '';
   selectedFile: File | null = null;
-  books: any[] = [];
+  books: Book[] = [];
   readCount = 0;
   readingCount = 0;
   unreadCount = 0;
 
-  constructor(
-    private route: ActivatedRoute,
-    private http: HttpClient,
-    public authService: AuthService,
-    private router: Router,
-  ) {}
+  private route = inject(ActivatedRoute);
+  private http = inject(HttpClient);
+  public authService = inject(AuthService);
+  private router = inject(Router);
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -40,35 +39,31 @@ export class UserProfileComponent implements OnInit {
   }
 
   loadUserProfile() {
-    this.http
-      .get<User>(`/api/users/${this.username}`)
-      .subscribe(
-        (data) => {
-          this.user = data;
-          this.updatedName = this.user?.name || '';
-          this.updatedDescription = this.user?.description || '';
-          this.loadUserBooks();
-        },
-        (error) => {
-          console.error('Error fetching user profile:', error);
-          this.user = null;
-        },
-      );
+    this.http.get<User>(`/api/users/${this.username}`).subscribe(
+      (data) => {
+        this.user = data;
+        this.updatedName = this.user?.name || '';
+        this.updatedDescription = this.user?.description || '';
+        this.loadUserBooks();
+      },
+      (error) => {
+        console.error('Error fetching user profile:', error);
+        this.user = null;
+      },
+    );
   }
 
   loadUserBooks() {
-    this.http
-      .get(`/api/users/${this.username}/books`)
-      .subscribe(
-        (data: any) => {
-          this.books = data;
-          this.calculateStats();
-        },
-        (error) => {
-          console.error('Error fetching user books:', error);
-          this.books = [];
-        },
-      );
+    this.http.get<Book[]>(`/api/users/${this.username}/books`).subscribe(
+      (data: Book[]) => {
+        this.books = data;
+        this.calculateStats();
+      },
+      (error) => {
+        console.error('Error fetching user books:', error);
+        this.books = [];
+      },
+    );
   }
 
   calculateStats() {
@@ -108,15 +103,11 @@ export class UserProfileComponent implements OnInit {
       description: this.updatedDescription,
     };
     this.http
-      .put(
-        `/api/users/update/${this.username}`,
-        updatedUser,
-        {
-          headers: { Authorization: 'Bearer ' + this.authService.getToken() },
-        },
-      )
+      .put<User>(`/api/users/update/${this.username}`, updatedUser, {
+        headers: { Authorization: 'Bearer ' + this.authService.getToken() },
+      })
       .subscribe(
-        (response: any) => {
+        (response: User) => {
           if (this.user) {
             this.user.name = response.name;
             this.user.description = response.description;
@@ -134,8 +125,11 @@ export class UserProfileComponent implements OnInit {
       );
   }
 
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
+  onFileSelected(event: Event) {
+    const target = event.target as HTMLInputElement | null;
+    if (target && target.files && target.files.length > 0) {
+      this.selectedFile = target.files[0];
+    }
   }
 
   uploadAvatar() {
@@ -147,14 +141,10 @@ export class UserProfileComponent implements OnInit {
     formData.append('file', this.selectedFile);
 
     this.http
-      .post(
-        `/api/users/${this.username}/avatar`,
-        formData,
-        {
-          headers: { Authorization: 'Bearer ' + this.authService.getToken() },
-          responseType: 'text',
-        },
-      )
+      .post(`/api/users/${this.username}/avatar`, formData, {
+        headers: { Authorization: 'Bearer ' + this.authService.getToken() },
+        responseType: 'text',
+      })
       .subscribe(
         () => {
           this.selectedFile = null;

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -11,5 +11,5 @@ import { NavbarComponent } from './navbar/navbar.component';
 export class AppComponent {
   currentYear: number = new Date().getFullYear();
 
-  constructor(private router: Router) {}
+  private router = inject(Router);
 }

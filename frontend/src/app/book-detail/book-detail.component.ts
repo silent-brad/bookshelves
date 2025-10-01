@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Book } from '../book';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule, DatePipe } from '@angular/common';
 import { AuthService } from '../auth.service';
@@ -13,15 +14,15 @@ import { AuthService } from '../auth.service';
 })
 export class BookDetailComponent implements OnInit {
   bookId = '';
-  book: any = null;
+  book: Book | null = null;
   currentUsername = '';
 
-  constructor(
-    private route: ActivatedRoute,
-    private http: HttpClient,
-    public authService: AuthService,
-    private router: Router
-  ) {
+  private route = inject(ActivatedRoute);
+  private http = inject(HttpClient);
+  public authService = inject(AuthService);
+  private router = inject(Router);
+
+  constructor() {
     this.currentUsername = localStorage.getItem('username') || '';
   }
 
@@ -33,7 +34,7 @@ export class BookDetailComponent implements OnInit {
   }
 
   loadBookDetail() {
-    this.http.get(`/api/books/${this.bookId}`).subscribe(
+    this.http.get<Book>(`/api/books/${this.bookId}`).subscribe(
       (data) => {
         this.book = data;
       },

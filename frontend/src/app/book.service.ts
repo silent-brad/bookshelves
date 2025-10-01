@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { Book } from './book';
+import { User } from './user';
 
 @Injectable({
   providedIn: 'root',
@@ -11,10 +12,8 @@ import { Book } from './book';
 export class BookService {
   private apiUrl = '/api/books';
 
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService,
-  ) {}
+  private http = inject(HttpClient);
+  private authService = inject(AuthService);
 
   private getHeaders() {
     return new HttpHeaders({
@@ -22,43 +21,45 @@ export class BookService {
     });
   }
 
-  getBooks(): Observable<any> {
-    return this.http.get(this.apiUrl).pipe(
-      tap((books: any) => {
-        books.forEach((book: any) => {
+  getBooks(): Observable<Book[]> {
+    return this.http.get<Book[]>(this.apiUrl).pipe(
+      tap((books: Book[]) => {
+        books.forEach((book: Book) => {
           this.updateBookOwnerData(book);
         });
       }),
     );
   }
 
-  updateBookOwnerData(book: any) {
-    this.http.get(`/api/users/${book.username}`).subscribe((userData: any) => {
-      book.ownerAvatar = `/api/uploads/avatars/${book.username}_avatar.webp`;
-      book.ownerName = userData.name || '';
-    });
+  updateBookOwnerData(book: Book) {
+    this.http
+      .get<User>(`/api/users/${book.username}`)
+      .subscribe((userData: User) => {
+        book.ownerAvatar = `/api/uploads/avatars/${book.username}_avatar.webp`;
+        book.ownerName = userData.name || '';
+      });
   }
 
-  refreshBookOwners(books: any[]) {
+  refreshBookOwners(books: Book[]) {
     books.forEach((book) => {
       this.updateBookOwnerData(book);
     });
   }
 
-  addBook(book: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/create`, book, {
+  addBook(book: Partial<Book>): Observable<Book> {
+    return this.http.post<Book>(`${this.apiUrl}/create`, book, {
       headers: this.getHeaders(),
     });
   }
 
-  updateBook(id: number, book: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/update/${id}`, book, {
+  updateBook(id: number, book: Partial<Book>): Observable<Book> {
+    return this.http.put<Book>(`${this.apiUrl}/update/${id}`, book, {
       headers: this.getHeaders(),
     });
   }
 
-  deleteBook(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/delete/${id}`, {
+  deleteBook(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/delete/${id}`, {
       headers: this.getHeaders(),
     });
   }

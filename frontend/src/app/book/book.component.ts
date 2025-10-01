@@ -1,9 +1,10 @@
-import { Component, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BookService } from '../book.service';
 import { AuthService } from '../auth.service';
 import { BasecoatSelectComponent } from '../basecoat-select/basecoat-select.component';
+import { Book } from '../book';
 
 @Component({
   selector: 'app-book',
@@ -12,8 +13,8 @@ import { BasecoatSelectComponent } from '../basecoat-select/basecoat-select.comp
   styleUrl: './book.component.css',
 })
 export class BookComponent {
-  @Input() books!: any[];
-  @Input() book!: any; // Add book type here
+  @Input() books!: Book[];
+  @Input() book!: Book;
   statusOptions = [
     { value: 'Unread', label: 'Unread' },
     { value: 'Reading', label: 'Reading' },
@@ -25,10 +26,10 @@ export class BookComponent {
   @ViewChild('shareBook') shareBookEl!: ElementRef;
   @ViewChild('deleteBook') deleteBookEl!: ElementRef;
 
-  constructor(
-    public authService: AuthService,
-    public bookService: BookService,
-  ) {
+  public authService = inject(AuthService);
+  public bookService = inject(BookService);
+
+  constructor() {
     this.currentUsername = localStorage.getItem('username') || '';
   }
 
@@ -70,7 +71,7 @@ export class BookComponent {
   }
 
   confirmDelete() {
-    this.bookService.deleteBook(this.book.id).subscribe(() => {
+    this.bookService.deleteBook(this.book.id!).subscribe(() => {
       this.toast(`Book deleted successfully.`);
       this.books = this.books.filter((b) => b.id !== this.book.id);
       this.closeDeleteModal();
@@ -79,12 +80,12 @@ export class BookComponent {
 
   updateBook() {
     this.bookService
-      .updateBook(this.book.id, {
+      .updateBook(this.book.id!, {
         title: this.book.title,
         author: this.book.author,
         status: this.book.status,
       })
-      .subscribe((res: any) => {
+      .subscribe( (res: Book) => {
         this.books = this.books.map((b) => (b.id === this.book.id ? res : b));
         this.editBookEl.nativeElement.close();
         this.toast(`Book ${res.title} updated successfully.`);
@@ -96,7 +97,7 @@ export class BookComponent {
   }
 
   deleteBook() {
-    this.bookService.deleteBook(this.book.id).subscribe(() => {
+    this.bookService.deleteBook(this.book.id!).subscribe(() => {
       this.books = this.books.filter((b) => b.id !== this.book.id);
       this.toast(`Book deleted successfully.`);
     });

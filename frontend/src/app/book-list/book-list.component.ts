@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BookService } from '../book.service';
 import { AuthService } from '../auth.service';
 import { BasecoatSelectComponent } from '../basecoat-select/basecoat-select.component';
 import { BookComponent } from '../book/book.component';
+import { Book } from '../book';
 
 @Component({
   standalone: true,
@@ -15,8 +16,8 @@ import { BookComponent } from '../book/book.component';
 })
 export class BookListComponent implements OnInit {
   // Add book type here
-  books: any[] = [];
-  newBook: any = { title: '', author: '', status: '' };
+  books: Book[] = [];
+  newBook: { title: string; author: string; status: string } = { title: '', author: '', status: '' };
   currentUsername = '';
   statusOptions = [
     { value: 'Unread', label: 'Unread' },
@@ -27,10 +28,10 @@ export class BookListComponent implements OnInit {
   skeletonNum: number[] = [1, 2, 3, 4, 5];
   @ViewChild('addBook') addBookEl!: ElementRef;
 
-  constructor(
-    private bookService: BookService,
-    public authService: AuthService,
-  ) {
+  private bookService = inject(BookService);
+  public authService = inject(AuthService);
+
+  constructor() {
     this.currentUsername = localStorage.getItem('username') || '';
   }
 
@@ -64,7 +65,7 @@ export class BookListComponent implements OnInit {
   }
 
   submitAddBook() {
-    this.bookService.addBook(this.newBook).subscribe((res: any) => {
+    this.bookService.addBook(this.newBook).subscribe( (res: Book) => {
       this.books = [...this.books, res];
       this.addBookEl.nativeElement.close();
       this.newBook = { title: '', author: '', status: '' };

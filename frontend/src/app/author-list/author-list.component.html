@@ -4,7 +4,7 @@
     <li
       *ngFor="let author of authors"
       class="cursor-pointer text-blue-600 hover:underline"
-      (click)="navigateToAuthor(author)"
+      (click)="navigateToAuthor(author)" (keydown.enter)="navigateToAuthor(author)" tabindex="0"
     >
       {{ author }}
     </li>

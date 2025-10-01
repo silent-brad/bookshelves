@@ -7,4 +7,5 @@ export interface Book {
   updatedAt?: string;
   username: string;
   ownerName: string;
+  ownerAvatar?: string;
 }

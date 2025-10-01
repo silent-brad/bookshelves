@@ -7,7 +7,7 @@
 
     <a
       href="/author/{{ book.author }}"
-      class="text-gray-600 dark:text-gray-400 font-italic"
+      class="text-gray-600 dark:text-gray-400 font-italic hover:text-underline"
       >{{ book.author }}
     </a>
 
@@ -71,7 +71,7 @@
           id="edit-dropdown-menu"
           aria-labelledby="edit-dropdown-trigger"
         >
-          <div role="heading" id="account-options">Options</div>
+           <div role="heading" aria-level="2" id="account-options">Options</div>
           <div
             role="menuitem"
             class="cursor-pointer"
@@ -151,27 +151,28 @@
     </div>
   </div>
   <!--NOTE: <p>{{ book.status }}</p>-->
-  <div class="flex space-x-2 justify-between">
+  <a
+    [href]="`/user/${book.username}`"
+    class="flex space-x-2 justify-between hover:underline">
     <img
-      class="w-6 h-6 rounded-full mr-2"
+      class="w-8 h-8 rounded-full mr-2"
       [src]="`/api/uploads/avatars/${book.username}_avatar.webp`"
       [alt]="'@' + book.username"
     />
     <span class="text-gray-500 dark:text-gray-400 text-sm mb-3">posted by</span>
-    <a
-      [href]="`/user/${book.username}`"
-      class="text-gray-600 dark:text-gray-400 hover:underline"
+    <span
+      class="text-gray-600 dark:text-gray-400"
       >{{
         book.ownerName
           ? book.ownerName + " @" + book.username
           : "@" + book.username
-      }}</a
-    >
+      }}
+    </span>
     <p class="text-gray-500 dark:text-gray-400 text-sm mb-3">
       {{ book.createdAt | date: "shortDate" }}
       <!-- NOTE: Include 1 day ago/4 hours ago etc here ??? -->
     </p>
-  </div>
+  </a>
 
   <dialog id="edit-book" #editBook class="dialog" aria-labelledby="edit-book-title" aria-describedby="edit-book-description">
     <article>

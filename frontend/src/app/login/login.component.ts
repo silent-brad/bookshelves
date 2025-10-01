@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
@@ -14,10 +14,8 @@ export class LoginComponent implements OnInit {
   username = '';
   password = '';
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-  ) {}
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
   ngOnInit() {
     if (this.authService.isLoggedIn()) {
@@ -29,14 +27,14 @@ export class LoginComponent implements OnInit {
     this.authService
       .login(this.username, this.password)
       // Check if login is successful
-      .subscribe((res: any) => {
-        this.toast('Login successful! Welcome back!');
-        this.router.navigate(['/books']);
-      ))
-      .error((err) => {
-        // Provide better msg: example: Username already taken
-        this.toastErr(err.error.message);
-      });
+       .subscribe((res: { jwt: string }) => {
+         this.toast('Login successful! Welcome back!');
+         this.router.navigate(['/books']);
+       },
+       (err) => {
+         // Provide better msg: example: Username already taken
+         this.toastErr(err.error.message);
+       });
   }
 
   toastErr(message: string) {

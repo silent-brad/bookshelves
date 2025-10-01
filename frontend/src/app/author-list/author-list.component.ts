@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BookService } from '../book.service';
 import { Router } from '@angular/router';
@@ -11,10 +11,8 @@ import { Router } from '@angular/router';
 export class AuthorListComponent implements OnInit {
   authors: string[] = [];
 
-  constructor(
-    private bookService: BookService,
-    private router: Router,
-  ) {}
+  private bookService = inject(BookService);
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.bookService.getAuthors().subscribe((authors) => {

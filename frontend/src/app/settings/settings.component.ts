@@ -1,8 +1,15 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  inject,
+} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
+import { User } from '../user';
 import { Router } from '@angular/router';
 
 @Component({
@@ -23,19 +30,17 @@ export class SettingsComponent implements OnInit {
   newPassword = '';
   confirmPassword = '';
 
-  constructor(
-    private http: HttpClient,
-    public authService: AuthService,
-    private router: Router,
-  ) {}
+  private http = inject(HttpClient);
+  public authService = inject(AuthService);
+  private router = inject(Router);
 
   ngOnInit() {
     this.loadUserProfile();
   }
 
   loadUserProfile() {
-    this.http.get(`/api/users/${this.username}`).subscribe(
-      (data: any) => {
+    this.http.get<User>(`/api/users/${this.username}`).subscribe(
+      (data: User) => {
         this.updatedName = data.name || '';
         this.updatedDescription = data.description || '';
       },
@@ -54,11 +59,11 @@ export class SettingsComponent implements OnInit {
       description: this.updatedDescription,
     };
     this.http
-      .put(`/api/users/update/${this.username}`, updatedUser, {
+      .put<User>(`/api/users/update/${this.username}`, updatedUser, {
         headers: { Authorization: 'Bearer ' + this.authService.getToken() },
       })
       .subscribe(
-        (response: any) => {
+        (response: User) => {
           localStorage.setItem('name', response.name || '');
           // Optionally show success message
         },
@@ -97,8 +102,11 @@ export class SettingsComponent implements OnInit {
       );
   }
 
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
+  onFileSelected(event: Event) {
+    const target = event.target as HTMLInputElement | null;
+    if (target?.files && target.files.length > 0) {
+      this.selectedFile = target.files[0];
+    }
   }
 
   uploadAvatar() {

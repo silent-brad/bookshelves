@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { User } from './user';
 
 @Injectable({
   providedIn: 'root',
@@ -9,28 +10,32 @@ import { tap } from 'rxjs/operators';
 export class AuthService {
   private apiUrl = '/api/auth';
 
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
-  login(username: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, { username, password }).pipe(
-      tap((response: any) => {
-        localStorage.setItem('token', response.jwt);
-        localStorage.setItem('username', username);
-        // Fetch user data to get name after login
-        this.http.get(`/api/users/${username}`).subscribe((userData: any) => {
-          localStorage.setItem('name', userData.name || '');
+  login(username: string, password: string): Observable<{ jwt: string }> {
+    return this.http
+      .post<{ jwt: string }>(`${this.apiUrl}/login`, { username, password })
+      .pipe(
+        tap((response: { jwt: string }) => {
+          localStorage.setItem('token', response.jwt);
           localStorage.setItem('username', username);
-          localStorage.setItem(
-            'avatar',
-            userData.avatarUrl && userData.avatarUrl !== ''
-              ? userData.avatarUrl
-              : userData.name === ''
-                ? 'default-avatar.png'
-                : `https://ui-avatars.com/api/?background=random&name=${userData.name.replace(' ', '+')}`,
-          );
-        });
-      }),
-    );
+          // Fetch user data to get name after login
+          this.http
+            .get<User>(`/api/users/${username}`)
+            .subscribe((userData: User) => {
+              localStorage.setItem('name', userData.name || '');
+              localStorage.setItem('username', username);
+              localStorage.setItem(
+                'avatar',
+                userData.avatarUrl && userData.avatarUrl !== ''
+                  ? userData.avatarUrl
+                  : userData.name === ''
+                    ? 'default-avatar.png'
+                    : `https://ui-avatars.com/api/?background=random&name=${(userData.name || '').replace(' ', '+')}`,
+              );
+            });
+        }),
+      );
   }
 
   register(
@@ -39,7 +44,7 @@ export class AuthService {
     email: string,
     name?: string,
     description?: string,
-  ): Observable<any> {
+  ): Observable<unknown> {
     return this.http
       .post('/api/users/register', {
         username,
@@ -49,7 +54,7 @@ export class AuthService {
         description,
       })
       .pipe(
-        tap((response: any) => {
+        tap((response: unknown) => {
           localStorage.setItem('username', username);
           localStorage.setItem('name', name || '');
         }),

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
@@ -13,10 +13,10 @@ export class NavbarComponent implements OnInit {
   username = '';
   name = '';
 
-  constructor(
-    public authService: AuthService,
-    private router: Router,
-  ) {
+  public authService = inject(AuthService);
+  private router = inject(Router);
+
+  constructor() {
     this.updateUserInfo();
   }
 
