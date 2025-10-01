@@ -76,11 +76,11 @@ public class UserController {
             // Only allow updating name and description
             user.setName(updatedUser.getName());
             user.setDescription(updatedUser.getDescription());
-            User savedUser = userService.save(user);
             // If name changed and no avatar set, generate a new default avatar
             if (!user.isAvatarSet() && !user.getName().equals(updatedUser.getName())) {
                 userService.generateDefaultAvatar(user);
             }
+            User savedUser = userService.save(user);
             // Update book owner fields
             bookService.updateBookOwnerFields(user);
             return ResponseEntity.ok(savedUser);
