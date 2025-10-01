@@ -32,8 +32,30 @@ export class LoginComponent implements OnInit {
       .subscribe((res: any) => {
         this.toast('Login successful! Welcome back!');
         this.router.navigate(['/books']);
+      ))
+      .error((err) => {
+        // Provide better msg: example: Username already taken
+        this.toastErr(err.error.message);
       });
   }
+
+  toastErr(message: string) {
+    document.dispatchEvent(
+      new CustomEvent('basecoat:toast', {
+        detail: {
+          config: {
+            category: 'danger',
+            title: 'Error',
+            description: message,
+            cancel: {
+              label: 'Dismiss',
+            },
+          },
+        },
+      }),
+    );
+  }
+
 
   toast(message: string) {
     document.dispatchEvent(

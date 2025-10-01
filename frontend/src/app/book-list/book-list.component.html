@@ -19,79 +19,37 @@
 
   <div *ngIf="books.length === 0" class="text-center text-gray-500">No books available.</div>
   <div *ngIf="!isLoading && books.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-    <div *ngFor="let book of books" class="card w-full p-4 h-fit">
-      <h2 class="text-xl font-semibold mb-2 dark:text-white">{{ book.title }}</h2>
-      <p><strong>Author:</strong> <a href="/author/{{ book.author }}" class="text-blue-600 dark:text-blue-400 hover:underline">{{ book.author }}</a></p>
-      <p><strong>Status:</strong> {{ book.status }}</p>
-      <p>
-        <strong>Added by:</strong>
-        <img class="w-6 h-6 rounded-full mr-2" [src]="`/api/uploads/avatars/${book.username}_avatar.webp`" [alt]="book.ownerName ? book.ownerName + ' @' + book.username : '@' + book.username"/>
-        <a [href]="`/user/${book.username}`" class="text-blue-600 dark:text-blue-400 hover:underline">{{ book.ownerName ? book.ownerName + ' @' + book.username : '@' + book.username }}</a>
-      </p>
-      <p class="text-gray-500 dark:text-gray-400 text-sm mb-3">{{ book.createdAt | date:'shortDate' }}</p>
-      <div class="flex space-x-2">
-        <a href="/book/{{ book.id }}" class="btn">Details</a>
-        <ng-container *ngIf="authService.isLoggedIn() && book.username === currentUsername">
-          <div id="edit-dropdown" class="dropdown-menu">
-            <button type="button" id="edit-dropdown-trigger" aria-haspopup="menu" aria-controls="edit-dropdown-menu" aria-expanded="false" class="btn-icon-ghost">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-            </button>
-            <div id="edit-dropdown-popover" data-popover aria-hidden="true" class="min-w-32">
-              <div role="menu" id="edit-dropdown-menu" aria-labelledby="edit-dropdown-trigger">
-                <div role="heading" id="account-options">Options</div>
-                <div role="menuitem" class="cursor-pointer" (click)="openEditModal(book.id)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path><path d="m15 5 4 4"></path></svg>
-                  <font style="vertical-align: inherit;">
-                    <font style="vertical-align: inherit;">
-                      Edit
-                    </font>
-                  </font>
-                </div>
-                <div role="menuitem" class="cursor-pointer" (click)="openShareModal(book.id)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" x2="12" y1="2" y2="15"></line></svg><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
-                  Share
-                </font></font></div>
-                <hr role="separator">
-                <div role="menuitem" class="text-destructive hover:bg-destructive/10 dark:hover:bg-destructive/20 focus:bg-destructive/10 dark:focus:bg-destructive/20 focus:text-destructive [&_svg]:!text-destructive cursor-pointer" (click)="deleteBook(book.id)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
-                  Delete
-                </font></font></div>
-              </div>
-            </div>
-          </div>
-        </ng-container>
-      </div>
-    </div>
+    <app-book *ngFor="let book of books" [book]="book" [books]="books"></app-book>
   </div>
 
-  <dialog id="edit-book" #editBook class="dialog" aria-labelledby="edit-book-title" aria-describedby="edit-book-description">
+  <dialog id="add-book" #addBook class="dialog" aria-labelledby="add-book-title" aria-describedby="add-book-description">
     <article>
       <header>
-        <h2 id="edit-book-title">{{ isEditing ? 'Edit Book' : 'Add Book' }}</h2>
-        <p id="edit-book-description">{{ isEditing ? 'Update the book details.' : 'Add a new book to your collection.' }}</p>
+        <h2 id="add-book-title">Add Book</h2>
+        <p id="add-book-description">Add a new book to your collection.</p>
       </header>
-      <form (ngSubmit)="submitForm()">
+      <form (ngSubmit)="submitAddBook()">
         <section>
           <div class="grid gap-3">
             <label for="title">Title</label>
-            <input class="input" id="title" type="text" [(ngModel)]="book.title" name="title" placeholder="Title" required>
+            <input class="input" id="title" type="text" [(ngModel)]="newBook.title" name="title" placeholder="Title" required>
           </div>
           <div class="grid gap-3">
             <label for="author">Author</label>
-            <input class="input" id="author" type="text" [(ngModel)]="book.author" name="author" placeholder="Author" required>
+            <input class="input" id="author" type="text" [(ngModel)]="newBook.author" name="author" placeholder="Author" required>
           </div>
           <div class="grid gap-3">
             <label for="status">Status</label>
-            <app-basecoat-select [options]="statusOptions" [(selectedValue)]="book.status" name="status" required></app-basecoat-select>
+            <app-basecoat-select [options]="statusOptions" [(selectedValue)]="newBook.status" name="status" required></app-basecoat-select>
           </div>
         </section>
         <footer class="grid gap-2 md:flex md:float-end">
-          <button type="button" class="btn-outline" (click)="closeEditModal()">Cancel</button>
-          <button type="submit" class="btn-primary">{{ isEditing ? 'Update' : 'Add' }}</button>
+          <button type="button" class="btn-outline" (click)="closeAddModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Update</button>
         </footer>
       </form>
 
-      <button type="button" aria-label="Close dialog" (click)="closeEditModal()" class="cursor-pointer">
+      <button type="button" aria-label="Close dialog" (click)="closeAddModal()" class="cursor-pointer">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x">
           <path d="M18 6 6 18" />
           <path d="m6 6 12 12" />
@@ -100,25 +58,4 @@
     </article>
   </dialog>
 
-  <dialog id="share-book" #shareBook class="dialog" aria-labelledby="share-book-title" aria-describedby="share-book-description">
-    <article>
-      <header>
-        <h2 id="share-book-title">Share book</h2>
-        <p id="share-book-description">...</p>
-      </header>
-      <section>
-        <button (click)="copyLink()" type="button" class="btn-outline">Copy link</button>
-      </section>
-      <footer class="grid gap-2 md:flex md:float-end">
-        <button type="button" class="btn-outline" (click)="closeShareModal()">Close</button>
-      </footer>
-
-      <button type="button" aria-label="Close dialog" (click)="closeShareModal()" class="cursor-pointer">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x">
-          <path d="M18 6 6 18" />
-          <path d="m6 6 12 12" />
-        </svg>
-      </button>
-    </article>
-  </dialog>
 </div>

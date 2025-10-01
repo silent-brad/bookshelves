@@ -42,7 +42,28 @@ export class RegisterComponent implements OnInit {
           this.toast('Registration successful! Welcome!');
           this.router.navigate(['/books']);
         });
+      })
+      .error((err) => {
+        // Provide better msg: example: Username already taken
+        this.toastErr(err.error.message);
       });
+  }
+
+  toastErr(message: string) {
+    document.dispatchEvent(
+      new CustomEvent('basecoat:toast', {
+        detail: {
+          config: {
+            category: 'danger',
+            title: 'Error',
+            description: message,
+            cancel: {
+              label: 'Dismiss',
+            },
+          },
+        },
+      }),
+    );
   }
 
   toast(message: string) {

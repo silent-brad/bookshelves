@@ -1,20 +1,22 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { BookService } from '../book.service';
 import { AuthService } from '../auth.service';
 import { BasecoatSelectComponent } from '../basecoat-select/basecoat-select.component';
+import { BookComponent } from '../book/book.component';
 
 @Component({
   standalone: true,
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.css'],
-  imports: [CommonModule, DatePipe, FormsModule, BasecoatSelectComponent],
+  imports: [CommonModule, FormsModule, BookComponent, BasecoatSelectComponent],
 })
 export class BookListComponent implements OnInit {
+  // Add book type here
   books: any[] = [];
-  book: any = { title: '', author: '', status: '' };
+  newBook: any = { title: '', author: '', status: '' };
   currentUsername = '';
   statusOptions = [
     { value: 'Unread', label: 'Unread' },
@@ -22,12 +24,8 @@ export class BookListComponent implements OnInit {
     { value: 'Read', label: 'Read' },
   ];
   isLoading = true;
-  isEditing = false;
   skeletonNum: number[] = [1, 2, 3, 4, 5];
-  editBookId: number | null = null;
-  shareableUrl = '';
-  @ViewChild('editBook') editBookEl!: ElementRef;
-  @ViewChild('shareBook') shareBookEl!: ElementRef;
+  @ViewChild('addBook') addBookEl!: ElementRef;
 
   constructor(
     private bookService: BookService,
@@ -41,10 +39,6 @@ export class BookListComponent implements OnInit {
       this.books = data;
       this.isLoading = false;
     });
-  }
-
-  refreshBookOwners() {
-    this.bookService.refreshBookOwners(this.books);
   }
 
   toast(message: string) {
@@ -65,94 +59,21 @@ export class BookListComponent implements OnInit {
   }
 
   openAddModal() {
-    this.isEditing = false;
-    this.book = { title: '', author: '', status: '' };
-    this.editBookEl.nativeElement.showModal();
+    this.newBook = { title: '', author: '', status: '' };
+    this.addBookEl.nativeElement.showModal();
   }
 
-  closeEditModal() {
-    this.editBookEl.nativeElement.close();
-  }
-
-  closeShareModal() {
-    this.shareBookEl.nativeElement.close();
-  }
-
-  addBook() {
-    this.bookService.addBook(this.book).subscribe((res: any) => {
+  submitAddBook() {
+    this.bookService.addBook(this.newBook).subscribe((res: any) => {
       this.books = [...this.books, res];
-      this.editBookEl.nativeElement.close();
-      this.book = { title: '', author: '', status: '' };
+      this.addBookEl.nativeElement.close();
+      this.newBook = { title: '', author: '', status: '' };
       this.toast(`Book ${res.title} updated successfully.`);
     });
   }
 
-  openEditModal(id: number) {
-    this.isEditing = true;
-    this.editBookId = id;
-    const bookToEdit = this.books.find((book) => book.id === id);
-    if (bookToEdit) {
-      this.book = {
-        title: bookToEdit.title,
-        author: bookToEdit.author,
-        status: bookToEdit.status,
-      };
-      this.editBookEl.nativeElement.showModal();
-    }
-  }
-
-  updateBook() {
-    if (this.editBookId !== null) {
-      this.bookService
-        .updateBook(this.editBookId, this.book)
-        .subscribe((res: any) => {
-          this.books = this.books.map((book) =>
-            book.id === this.editBookId ? res : book,
-          );
-          this.editBookEl.nativeElement.close();
-          this.book = { title: '', author: '', status: '' };
-          this.editBookId = null;
-          this.isEditing = false;
-          this.toast(`Book ${res.title} updated successfully.`);
-        });
-    }
-  }
-
-  submitForm() {
-    if (this.isEditing) {
-      this.updateBook();
-    } else {
-      this.addBook();
-    }
-  }
-
-  editBook(id: number) {
-    this.openEditModal(id);
-  }
-
-  openShareModal(id: number) {
-    this.shareableUrl = `http://localhost:4200/book/${id}`;
-    this.shareBookEl.nativeElement.showModal();
-  }
-
-  copyLink() {
-    navigator.clipboard
-      .writeText(this.shareableUrl)
-      .then(() => {
-        this.toast(`Link copied to clipboard.`);
-        this.shareBookEl.nativeElement.close();
-      })
-      .catch((err) => {
-        console.error('Failed to copy: ', err);
-        // Toast..?
-      });
-    this.shareableUrl = '';
-  }
-
-  deleteBook(id: number) {
-    this.bookService.deleteBook(id).subscribe(() => {
-      this.books = this.books.filter((book) => book.id !== id);
-      this.toast(`Book deleted successfully.`);
-    });
+  closeAddModal() {
+    this.newBook = { title: '', author: '', status: '' };
+    this.addBookEl.nativeElement.close();
   }
 }
