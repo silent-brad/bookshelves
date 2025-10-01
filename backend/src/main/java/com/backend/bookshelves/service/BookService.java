@@ -5,6 +5,7 @@ import com.backend.bookshelves.model.User;
 import com.backend.bookshelves.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -58,5 +59,10 @@ public class BookService {
             book.setOwnerName(user.getName() != null ? user.getName() : user.getUsername());
             bookRepository.save(book);
         }
+    }
+
+    @Transactional
+    public void deleteBooksByOwner(User owner) {
+        bookRepository.deleteByOwner(owner);
     }
 }

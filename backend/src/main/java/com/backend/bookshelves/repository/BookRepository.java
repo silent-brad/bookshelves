@@ -10,6 +10,8 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByOwner(User owner);
 
+    void deleteByOwner(User owner);
+
     @Query("SELECT DISTINCT b.author FROM Book b")
     List<String> findDistinctAuthors();
 

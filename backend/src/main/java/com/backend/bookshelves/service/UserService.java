@@ -2,6 +2,8 @@ package com.backend.bookshelves.service;
 
 import com.backend.bookshelves.model.User;
 import com.backend.bookshelves.repository.UserRepository;
+import com.backend.bookshelves.service.BookService;
+import java.io.File;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,6 +16,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+ 
+    @Autowired
+    private BookService bookService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -35,10 +40,14 @@ public class UserService implements UserDetailsService {
 
     public void generateDefaultAvatar(User user) {
         try {
-            String name = user.getName() != null && !user.getName().isEmpty() ? user.getName() : user.getUsername();
-            String avatarUrl = "https://ui-avatars.com/api/?background=random&name=" + (name.contains(" ") ? name.replace(" ", "+") : name);
+            String name = (user.getName() != null && !user.getName().isEmpty() ? user.getName().trim() : user.getUsername().trim());
+            String processedName = java.net.URLEncoder.encode(name, "UTF-8");
+            String avatarUrl = "https://ui-avatars.com/api/?background=random&name=" + processedName + "&format=png";
             java.net.URL url = new java.net.URL(avatarUrl);
             java.awt.image.BufferedImage image = javax.imageio.ImageIO.read(url);
+            if (image == null) {
+                throw new RuntimeException("Failed to read image from URL: " + avatarUrl);
+            }
             java.io.File outputDir = new java.io.File("uploads/avatars/");
             if (!outputDir.exists()) {
                 outputDir.mkdirs();
@@ -56,12 +65,11 @@ public class UserService implements UserDetailsService {
                 javax.imageio.ImageIO.write(image, "WEBP", outputFile);
             } else {
                 javax.imageio.ImageIO.write(image, "PNG", outputFile);
-                System.out.println("WebP format not supported, saved as PNG");
+                logger.warning("WebP format not supported, saved as PNG");
             }
-            user.setAvatarSet(true);
-            userRepository.save(user);
         } catch (Exception e) {
-            System.out.println("Error generating default avatar: " + e.getMessage());
+            logger.severe("Error generating default avatar: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -80,5 +88,20 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
         return user;
+    }
+
+    public void deleteUser(String username) {
+        User user = findByUsername(username);
+        if (user != null) {
+            bookService.deleteBooksByOwner(user);
+            userRepository.delete(user);
+            // Delete avatar
+            File avatarFile = new File("uploads/avatars/" + user.getUsername() + "_avatar.webp");
+            if (avatarFile.exists()) {
+                avatarFile.delete();
+            }
+        } else {
+            throw new UsernameNotFoundException("User not found with username: " + username);
+        }
     }
 }

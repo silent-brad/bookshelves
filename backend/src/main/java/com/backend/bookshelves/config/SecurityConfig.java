@@ -40,7 +40,7 @@ public class SecurityConfig {
           }))
           .authorizeHttpRequests(auth -> auth
                   .requestMatchers("/api/users/register", "/api/auth/login", "/api/books", "/api/books/**", "/api/users/**", "/api/uploads/**").permitAll()
-                  .requestMatchers("/api/change-password", "/api/books/create", "/api/books/update/**", "/api/books/delete/**", "/api/users/update/**").authenticated()
+                  .requestMatchers("/api/change-password", "/api/delete", "/api/books/create", "/api/books/update/**", "/api/books/delete/**", "/api/users/update/**").authenticated()
                   .anyRequest().authenticated()
           )
           .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

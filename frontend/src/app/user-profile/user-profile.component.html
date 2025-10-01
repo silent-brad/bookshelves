@@ -8,10 +8,6 @@
         <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-gray-300 mb-4 mx-auto md:mx-0">
           <img [src]="`/api/uploads/avatars/${username}_avatar.webp`" alt="User Avatar" class="w-full h-full object-cover">
         </div>
-        <div *ngIf="isCurrentUser() && isEditing" class="mb-4 text-center md:text-left">
-          <input type="file" (change)="onFileSelected($event)" accept="image/*" class="mb-2">
-          <button (click)="uploadAvatar()" class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full" [disabled]="!selectedFile">Upload Avatar</button>
-        </div>
         <h3 class="mb-2">About</h3>
         <p><strong>Username:</strong> {{ user.username }}</p>
         <p><strong>Name:</strong> {{ user.name || 'Not set' }}</p>
@@ -62,23 +58,6 @@
         </ng-template>
       </div>
     </section>
-    <div *ngIf="authService.isLoggedIn() && authService.getToken() && isCurrentUser()" class="mt-6">
-      <button (click)="toggleEdit()" class="btn">{{ isEditing ? 'Cancel' : 'Edit Profile' }}</button>
-      <div *ngIf="isEditing" class="card mt-4 p-4 bg-muted">
-        <h3>Edit Profile</h3>
-        <form class="form grid gap-4" (submit)="saveChanges()">
-          <div class="grid gap-2">
-            <label for="name">Name</label>
-            <input id="name" type="text" [(ngModel)]="updatedName" name="name" placeholder="Name">
-          </div>
-          <div class="grid gap-2">
-            <label for="description">Description</label>
-            <textarea id="description" [(ngModel)]="updatedDescription" name="description" placeholder="Description"></textarea>
-          </div>
-          <button type="submit" class="btn">Save Changes</button>
-        </form>
-      </div>
-    </div>
     <footer class="mt-6">
       <button (click)="goToBooks()" class="btn-outline">Back to Books</button>
     </footer>

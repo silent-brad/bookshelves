@@ -77,12 +77,12 @@ public class UserController {
             user.setName(updatedUser.getName());
             user.setDescription(updatedUser.getDescription());
             User savedUser = userService.save(user);
-            // Update book owner fields
-            bookService.updateBookOwnerFields(user);
             // If name changed and no avatar set, generate a new default avatar
             if (!user.isAvatarSet() && !user.getName().equals(updatedUser.getName())) {
                 userService.generateDefaultAvatar(user);
             }
+            // Update book owner fields
+            bookService.updateBookOwnerFields(user);
             return ResponseEntity.ok(savedUser);
         }
         return ResponseEntity.notFound().build();
@@ -131,13 +131,11 @@ public class UserController {
                 return ResponseEntity.badRequest().body("Error during image conversion: " + ex.getMessage() + ", saved original file");
             }
 
-            // Update user's avatarSet flag
+             // Update user's avatarSet flag
             user.setAvatarSet(true);
             userService.save(user);
-            // Update book owner fields
-            //bookService.updateBookOwnerFields(user);
 
-            return ResponseEntity.ok("http://localhost:8000/uploads/avatars/" + fileName);
+            return ResponseEntity.ok();
         } catch (IOException e) {
             return ResponseEntity.badRequest().body("Failed to upload avatar: " + e.getMessage());
         }
@@ -147,10 +145,10 @@ public class UserController {
     public ResponseEntity<String> changePassword(@RequestBody PasswordChangeRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-User user = userService.findByUsername(username);
-if (user == null) {
-    throw new UsernameNotFoundException("User not found");
-}
+        User user = userService.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
 
         if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
             return ResponseEntity.badRequest().body("Old password is incorrect");
@@ -170,5 +168,12 @@ if (user == null) {
         public void setOldPassword(String oldPassword) { this.oldPassword = oldPassword; }
         public String getNewPassword() { return newPassword; }
         public void setNewPassword(String newPassword) { this.newPassword = newPassword; }
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteAccount(Authentication authentication) {
+        String username = authentication.getName();
+        userService.deleteUser(username);
+        return ResponseEntity.ok("Account deleted successfully");
     }
 }

@@ -19,7 +19,7 @@ export const routes: Routes = [
   { path: 'user/:username', component: UserProfileComponent },
   { path: 'authors', component: AuthorListComponent },
   { path: 'author/:author', component: AuthorDetailComponent },
-  { path: 'settings', component: SettingsComponent }, //canActivate: [AuthGuard] },
+  { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] },
   { path: '', component: IndexComponent },
   { path: '**', component: PageNotFoundComponent },
 ];

@@ -22,12 +22,12 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private String password;
+    private String avatarSet;
 
     @Column(nullable = false, unique = true)
     private String email;
     private String name;
     private String description;
-    private Boolean avatarSet = false;
     private java.time.LocalDateTime createdAt;
 
     // Constructors
@@ -64,6 +64,14 @@ public class User implements UserDetails {
         this.name = name;
     }
 
+    public String getAvatarSet() {
+      return avatarSet;
+    }
+
+    public void setAvatarSet(String avatarSet) {
+      this.avatarSet = avatarSet;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -74,14 +82,6 @@ public class User implements UserDetails {
 
     public java.time.LocalDateTime getCreatedAt() {
         return createdAt;
-    }
-
-    public boolean isAvatarSet() {
-        return avatarSet;
-    }
-
-    public void setAvatarSet(boolean avatarSet) {
-        this.avatarSet = avatarSet;
     }
 
     public void setCreatedAt(java.time.LocalDateTime createdAt) {
