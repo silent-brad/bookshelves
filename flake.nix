@@ -37,7 +37,7 @@
           };
 
           dockerImage = pkgs.dockerTools.buildLayeredImage {
-            name = "registry.fly.io/bookshelves:latest";
+            name = "registry.fly.io/bookshelves";
             tag = "latest";
 
             contents = with pkgs; [
