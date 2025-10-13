@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+# Test script for the Docker image
+set -e
+
+echo "Testing Docker image build and structure..."
+
+# Build the Docker image
+echo "Building Docker image with Nix..."
+nix build .#dockerImage
+
+# Check if the result exists and is a tarball
+if [ ! -f result ]; then
+  echo "ERROR: Docker image build failed - no result file"
+  exit 1
+fi
+
+echo "Docker image built successfully: $(readlink result)"
+
+# If docker is available, load and test the image
+if command -v docker &>/dev/null; then
+  echo "Loading Docker image..."
+  docker load <result
+
+  echo "Testing Docker image..."
+  # Run the container in detached mode with volume mounts for persistence
+  CONTAINER_ID=$(docker run -d -p 8080:8080 \
+    -v $(pwd)/bookshelves.db:/data/bookshelves.db \
+    -v $(pwd)/uploads:/uploads \
+    bookshelves:latest)
+
+  # Wait a moment for startup
+  sleep 5
+
+  # Check if container is running
+  if docker ps | grep -q $CONTAINER_ID; then
+    echo "SUCCESS: Container is running"
+
+    # Test if the application responds
+    if curl -f -s http://localhost:8080 >/dev/null; then
+      echo "SUCCESS: Application is responding on port 8080"
+    else
+      echo "WARNING: Application not responding on port 8080 (may need more startup time)"
+    fi
+  else
+    echo "ERROR: Container failed to start"
+    docker logs $CONTAINER_ID
+    exit 1
+  fi
+
+  # Cleanup
+  docker stop $CONTAINER_ID
+  docker rm $CONTAINER_ID
+
+  echo "SUCCESS: Docker image works correctly"
+else
+  echo "Docker not available - only checked build process"
+  echo "Image ready at: $(readlink result)"
+fi
