@@ -7,7 +7,7 @@ app = 'bookshelves'
 primary_region = 'iad'
 
 [build]
-image = 'hub.docker.com/silentbrad/bookshelves:tagname'
+image = 'index.docker.io/silentbrad/bookshelves:latest'
 
 [env]
 PORT = '8080'
